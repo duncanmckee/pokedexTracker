@@ -1,12 +1,31 @@
+:root {
+    --body-bg-color: #DDDDDD;
+    --header-bg-color: #888888;
+    --header-color: #FFFFFF;
+}
+
 body {
-    background: #DDDDDD;
+    background: var(--body-bg-color);
 }
 
 .navbar {
-    background-color: #800000;
-    color: white;
+    background-color: var(--header-bg-color);
+    color: var(--header-color);
 }
 
 .page-container {
     margin-top: 75px;
+}
+
+.bmd-layout-content {
+    height: 100vh;
+}
+
+.bmd-layout-drawer > header {
+    background-color: var(--header-bg-color);
+    color: var(--header-color);
+}
+
+.list-group-item {
+    cursor: pointer;
 }
