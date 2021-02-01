@@ -30,19 +30,25 @@ body {
     cursor: pointer;
 }
 
+#detailContainer {
+    width: 450px;
+}
+
 .d-header {
     display: inline;
 }
 
 #pkmnID {
-    text-align: left;
+    float:left;
 }
 #pkmnName {
-    text-align: right;
+    float:right;
+    text-transform: capitalize;
 }
 
 
 .stat-table {
+    border-collapse: separate;
     background: #78C850;
     border-radius: 10px;
     border: 3px solid #A040A0;
@@ -67,7 +73,7 @@ body {
 .stat-bar {
     border: 1px solid;
     width: 0%;
-    height: 20px;
+    height: 30px;
 }
 
 .hp-row {

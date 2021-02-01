@@ -74,11 +74,30 @@ poke.PokemonPageController = class {
 		.then(response => response.json())
 		.then(data => {
 			console.log(data);
-			document.querySelector("#pkmnName").innerHTML = data.name;
+			let name = data.name;
+			document.querySelector("#pkmnName").innerHTML = name;
 			document.querySelector("#pkmnHT").innerHTML = `HT: ${data.weight/10} m`;
 			document.querySelector("#pkmnWT").innerHTML = `WT: ${data.height/10} kg`;
+			const hpStat = data.stats[0].base_stat;
+			const atkStat = data.stats[1].base_stat;
+			const defStat = data.stats[2].base_stat;
+			const spatkStat = data.stats[3].base_stat;
+			const spdefStat = data.stats[4].base_stat;
+			const spdStat = data.stats[5].base_stat;
+			document.querySelector("#hpValue").innerHTML = hpStat;
+			document.querySelector("#atkValue").innerHTML = atkStat;
+			document.querySelector("#defValue").innerHTML = defStat;
+			document.querySelector("#spatkValue").innerHTML = spatkStat;
+			document.querySelector("#spdefValue").innerHTML = spdefStat;
+			document.querySelector("#spdValue").innerHTML = spdStat;
+			document.querySelector(".hp-bar").style = `width:${100*hpStat/255}%;`;
+			document.querySelector(".atk-bar").style = `width:${100*atkStat/255}%;`;
+			document.querySelector(".def-bar").style = `width:${100*defStat/255}%;`;
+			document.querySelector(".spatk-bar").style = `width:${100*spatkStat/255}%;`;
+			document.querySelector(".spdef-bar").style = `width:${100*spdefStat/255}%;`;
+			document.querySelector(".spd-bar").style = `width:${100*spdStat/255}%;`;
 		});
-		document.querySelector("#pkmnID").innerHTML = pid;
+		document.querySelector("#pkmnID").innerHTML = `#${pid}`;
 		document.querySelector("#pkmnSprite").src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pid}.png`;
 	}
 	updatePage() {
