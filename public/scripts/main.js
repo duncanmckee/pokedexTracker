@@ -222,7 +222,7 @@ poke.initializePage = function() {
 	if(document.querySelector("#pokemonDetailsPage")) {
 		const pid = urlParams.get("pid");
 		if(!pid) {
-			window.location.href = "/index.html?pid=1";
+			window.location.href = "/pokemon.html?pid=1";
 		} else {
 			poke.fbPokemonManager = new this.FbPokemonManager(pid);
 			new poke.PokemonPageController(pid);
