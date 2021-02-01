@@ -28,12 +28,80 @@
       <ul class="list-group">
         <a id="menuProfile" class="list-group-item"><i class="material-icons">account_box</i>My Profile</a>
         <a id="menuShowAll" class="list-group-item"><i class="material-icons"></i>Pokedex</a>
+        <a id="menuShowMy" class="list-group-item"><i class="material-icons"></i>My Pokedex</a>
         <a id="menuSignOut" class="list-group-item"><i class="material-icons">logout</i>Sign Out</a>
       </ul>
     </div>
     <main class="bmd-layout-content">
-      <div id="mainPage" class="container page-container">
-        
+      <div id="pokemonDetailsPage" class="container page-container">
+        <div id="detailContainer">
+          <div id="detailHeader">
+            <h1 id="pkmnID" class="d-header">???</h1>
+            <h1 id="pkmnName" class="d-header">Loading...</h1>
+          </div>
+          <img id="pkmnSprite" src="">
+          <p id="pkmnHT">HT: ?.? m</p>
+          <p id="pkmnWT">WT: ?.? kg</p>
+
+          <table class="stat-table">
+            <tbody>
+              <tr class="stat-row hp-row">
+                <th class="stat-header">
+                  <div class="stat-name">HP:</div>
+                  <div class="stat-value">###</div>
+                </th>
+                <td class="stat-data">
+                  <div class="stat-bar hp-bar"></div>
+                </td>
+              </tr>
+              <tr class="stat-row atk-row">
+                <th class="stat-header">
+                  <div class="stat-name">ATK:</div>
+                  <div class="stat-value">###</div>
+                </th>
+                <td class="stat-data">
+                  <div class="stat-bar atk-bar"></div>
+                </td>
+              </tr>
+              <tr class="stat-row def-row">
+                <th class="stat-header">
+                  <div class="stat-name">DEF:</div>
+                  <div class="stat-value">###</div>
+                </th>
+                <td class="stat-data">
+                  <div class="stat-bar def-bar"></div>
+                </td>
+              </tr>
+              <tr class="stat-row spatk-row">
+                <th class="stat-header">
+                  <div class="stat-name">SPATK:</div>
+                  <div class="stat-value">###</div>
+                </th>
+                <td class="stat-data">
+                  <div class="stat-bar spatk-bar"></div>
+                </td>
+              </tr>
+              <tr class="stat-row spdef-row">
+                <th class="stat-header">
+                  <div class="stat-name">SPDEF:</div>
+                  <div class="stat-value">###</div>
+                </th>
+                <td class="stat-data">
+                  <div class="stat-bar spdef-bar"></div>
+                </td>
+              </tr>
+              <tr class="stat-row spd-row">
+                <th class="stat-header">
+                  <div class="stat-name">SPD:</div>
+                  <div class="stat-value">###</div>
+                </th>
+                <td class="stat-data">
+                  <div class="stat-bar spd-bar"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </main>
   </div>
