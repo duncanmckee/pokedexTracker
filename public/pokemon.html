@@ -7,7 +7,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
   <link rel="stylesheet" href="styles/bootstrap-material-design.min.css">
   <link rel="stylesheet" href="styles/main.css">
-  <title>Pokedex Tracker</title>
+  <link rel="stylesheet" href="styles/testing.css">
+  <title>Pokédex Tracker</title>
 </head>
 
 <body>
@@ -18,30 +19,45 @@
           <span class="sr-only">Toggle drawer</span>
           <i class="material-icons">menu</i>
         </button>
-        <a class="navbar-brand" href="#">Pokedex Tracker</a>
+        <a class="navbar-brand" href="#">Pokédex Tracker</a>
       </div>
     </header>
     <div id="dw-s2" class="bmd-layout-drawer bg-faded">
       <header>
-        <a class="navbar-brand">Pokedex Tracker</a>
+        <a class="navbar-brand">Pokédex Tracker</a>
       </header>
       <ul class="list-group">
         <a id="menuProfile" class="list-group-item"><i class="material-icons">account_box</i>My Profile</a>
-        <a id="menuShowAll" class="list-group-item"><i class="material-icons"></i>Pokedex</a>
-        <a id="menuShowMy" class="list-group-item"><i class="material-icons"></i>My Pokedex</a>
+        <a id="menuShowAll" class="list-group-item"><i class="material-icons"></i>Pokédex</a>
+        <a id="menuShowMy" class="list-group-item"><i class="material-icons"></i>My Pokédex</a>
         <a id="menuSignOut" class="list-group-item"><i class="material-icons">logout</i>Sign Out</a>
       </ul>
     </div>
     <main class="bmd-layout-content">
       <div id="pokemonDetailsPage" class="container page-container">
+        <div id="pokedexList">
+          <div>Test</div>
+        </div>
         <div id="detailContainer">
           <div id="detailHeader">
             <h1 id="pkmnID" class="d-header">#???</h1>
             <h1 id="pkmnName" class="d-header">Loading...</h1>
           </div>
           <img id="pkmnSprite" src="">
-          <div id="pkmnHT">HT: ?.? m</div>
-          <div id="pkmnWT">WT: ?.? kg</div>
+          <div id="pkmnDescription">
+            <div id="pkmnCategory">??? Pokémon</div>
+            <div id="pkmnHT">HT: ?.? m</div>
+            <div id="pkmnWT">WT: ?.? kg</div>
+          </div>
+          <div id="pkmnType">
+            <div id="pkmnPType">???</div>
+            <div id="pkmnSType">???</div>
+          </div>
+          <div id="pkmnAbility">
+            <div id="pkmnPAbility"></div>
+            <div id="pkmnSAbility"></div>
+            <div id="pkmnHAbility"></div>
+          </div>
 
           <table class="stat-table">
             <tbody>
@@ -101,7 +117,39 @@
               </tr>
             </tbody>
           </table>
+          <table class="egg-table">
+            <tbody>
+              <tr id="eggPGroup" class="egg-row">
+                <th class="egg-header">
+                  <div class="egg-group">Egg Group 1</div>
+                </th>
+              </tr>
+              <tr id="eggSGroup" class="egg-row">
+                <th class="egg-header">
+                  <div class="egg-group">Egg Group 2</div>
+                </th>
+              </tr>
+              <tr id="eggSteps" class="egg-row">
+                <th class="egg-header">
+                  <div class="egg-group">#### Steps</div>
+                </th>
+              </tr>
+            </tbody>
+          </table>
         </div>
+        <div id="gamesContainer">
+
+        </div>
+        <div id="evolutionContainer">
+
+        </div>
+        <div id="learnsetContainer">
+
+        </div>
+        <div id="encountersContainer">
+
+        </div>
+
       </div>
     </main>
   </div>
