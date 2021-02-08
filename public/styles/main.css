@@ -32,6 +32,14 @@ body {
     color: var(--header-color);
 }
 
+.bmd-layout-content>#loginPage {
+    display: grid;
+    grid-template-areas: 'header header header header header header' 'main main main right right right' 'footer footer footer footer footer footer';
+    grid-gap: 10px;
+    background-color: #2196F3;
+    padding: 10px;
+}
+
 .bmd-layout-content>#loginPage h1 {
     /* round boi */
     border-radius: 25px;
@@ -43,6 +51,13 @@ body {
     color: white;
     font-weight: bold;
     text-align: center;
+}
+
+.grid-container>div {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 30px;
 }
 
 .list-group-item {
