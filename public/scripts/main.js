@@ -337,7 +337,7 @@ poke.main = function() {
         });
     };
 
-    rhit.startFirebaseAuthUi();
+    poke.startFirebaseAuthUi();
 };
 
 poke.startFirebaseAuthUi = () => {
