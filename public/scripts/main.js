@@ -20,238 +20,319 @@ poke.fbTradeDetailManager = null;
 
 
 poke.SideNavController = class {
-	constructor() {
-		const menuProfileItem = document.querySelector("#menuProfile");
-		if(menuProfileItem) {
-			menuProfileItem.addEventListener("click", (event) => {
-				window.location.href = "/profile.html";
-			});
-		}
-		const menuShowAllItem = document.querySelector("#menuShowAll");
-		if(menuShowAllItem) {
-			menuShowAllItem.addEventListener("click", (event) => {
-				window.location.href = "/dex.html"; 
-			});
-		}
-		const menuShowMyItem = document.querySelector("#menuShowMy");
-		if(menuShowMyItem) {
-			menuShowMyItem.addEventListener("click", (event) => {
-				window.location.href = `/dex.html?uid=${rhit.fbAuthManager.uid}`;
-			});
-		}
-		const menuSignOutItem = document.querySelector("#menuSignOut");
-		if(menuSignOutItem) {
-			menuSignOutItem.addEventListener("click", (event) => {
-				rhit.fbAuthManager.signOut();
-			});
-		}
-	}
+    constructor() {
+        const menuProfileItem = document.querySelector("#menuProfile");
+        if (menuProfileItem) {
+            menuProfileItem.addEventListener("click", (event) => {
+                window.location.href = "/profile.html";
+            });
+        }
+        const menuShowAllItem = document.querySelector("#menuShowAll");
+        if (menuShowAllItem) {
+            menuShowAllItem.addEventListener("click", (event) => {
+                window.location.href = "/dex.html";
+            });
+        }
+        const menuShowMyItem = document.querySelector("#menuShowMy");
+        if (menuShowMyItem) {
+            menuShowMyItem.addEventListener("click", (event) => {
+                window.location.href = `/dex.html?uid=${rhit.fbAuthManager.uid}`;
+            });
+        }
+        const menuSignOutItem = document.querySelector("#menuSignOut");
+        if (menuSignOutItem) {
+            menuSignOutItem.addEventListener("click", (event) => {
+                rhit.fbAuthManager.signOut();
+            });
+        }
+    }
 }
 poke.LoginPageController = class {
-	constructor() {
+    constructor() {
 
-	}
+    }
 }
 poke.ProfilePageController = class {
-	constructor() {
+    constructor() {
 
-	}
-	updatePage() {
+    }
+    updatePage() {
 
-	}
+    }
 }
 poke.PokedexPageController = class {
-	constructor() {
+    constructor() {
 
-	}
-	updatePage() {
+    }
+    updatePage() {
 
-	}
+    }
 }
 poke.PokemonPageController = class {
-	constructor(pid) {
-		fetch(`https://pokeapi.co/api/v2/pokemon/${pid}`)
-		.then(response => response.json())
-		.then(data => {
-			console.log(data);
-			let name = data.name;
-			document.querySelector("#pkmnName").innerHTML = name;
-			document.querySelector("#pkmnHT").innerHTML = `HT: ${data.weight/10} m`;
-			document.querySelector("#pkmnWT").innerHTML = `WT: ${data.height/10} kg`;
-			const hpStat = data.stats[0].base_stat;
-			const atkStat = data.stats[1].base_stat;
-			const defStat = data.stats[2].base_stat;
-			const spatkStat = data.stats[3].base_stat;
-			const spdefStat = data.stats[4].base_stat;
-			const spdStat = data.stats[5].base_stat;
-			document.querySelector("#hpValue").innerHTML = hpStat;
-			document.querySelector("#atkValue").innerHTML = atkStat;
-			document.querySelector("#defValue").innerHTML = defStat;
-			document.querySelector("#spatkValue").innerHTML = spatkStat;
-			document.querySelector("#spdefValue").innerHTML = spdefStat;
-			document.querySelector("#spdValue").innerHTML = spdStat;
-			document.querySelector(".hp-bar").style = `width:${100*hpStat/255}%;`;
-			document.querySelector(".atk-bar").style = `width:${100*atkStat/255}%;`;
-			document.querySelector(".def-bar").style = `width:${100*defStat/255}%;`;
-			document.querySelector(".spatk-bar").style = `width:${100*spatkStat/255}%;`;
-			document.querySelector(".spdef-bar").style = `width:${100*spdefStat/255}%;`;
-			document.querySelector(".spd-bar").style = `width:${100*spdStat/255}%;`;
-		});
-		document.querySelector("#pkmnID").innerHTML = `#${pid}`;
-		document.querySelector("#pkmnSprite").src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pid}.png`;
-	}
-	updatePage() {
+    constructor(pid) {
+        fetch(`https://pokeapi.co/api/v2/pokemon/${pid}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                let name = data.name;
+                document.querySelector("#pkmnName").innerHTML = name;
+                document.querySelector("#pkmnHT").innerHTML = `HT: ${data.weight/10} m`;
+                document.querySelector("#pkmnWT").innerHTML = `WT: ${data.height/10} kg`;
+                const hpStat = data.stats[0].base_stat;
+                const atkStat = data.stats[1].base_stat;
+                const defStat = data.stats[2].base_stat;
+                const spatkStat = data.stats[3].base_stat;
+                const spdefStat = data.stats[4].base_stat;
+                const spdStat = data.stats[5].base_stat;
+                document.querySelector("#hpValue").innerHTML = hpStat;
+                document.querySelector("#atkValue").innerHTML = atkStat;
+                document.querySelector("#defValue").innerHTML = defStat;
+                document.querySelector("#spatkValue").innerHTML = spatkStat;
+                document.querySelector("#spdefValue").innerHTML = spdefStat;
+                document.querySelector("#spdValue").innerHTML = spdStat;
+                document.querySelector(".hp-bar").style = `width:${100*hpStat/255}%;`;
+                document.querySelector(".atk-bar").style = `width:${100*atkStat/255}%;`;
+                document.querySelector(".def-bar").style = `width:${100*defStat/255}%;`;
+                document.querySelector(".spatk-bar").style = `width:${100*spatkStat/255}%;`;
+                document.querySelector(".spdef-bar").style = `width:${100*spdefStat/255}%;`;
+                document.querySelector(".spd-bar").style = `width:${100*spdStat/255}%;`;
+            });
+        document.querySelector("#pkmnID").innerHTML = `#${pid}`;
+        document.querySelector("#pkmnSprite").src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pid}.png`;
+    }
+    updatePage() {
 
-	}
+    }
 }
 poke.TradesListPageController = class {
-	constructor() {
+    constructor() {
 
-	}
-	updatePage() {
+    }
+    updatePage() {
 
-	}
+    }
 }
-poke.TradeDetailPageController = class{
-	constructor() {
+poke.TradeDetailPageController = class {
+    constructor() {
 
-	}
-	updatePage() {
+    }
+    updatePage() {
 
-	}
+    }
 }
 
 poke.FbAuthManager = class {
-	constructor() {
+    constructor() {
 
-	}
-	beginListening(changeListener) {
+    }
+    beginListening(changeListener) {
 
-	}
-	signIn() {
+    }
+    signIn() {
 
-	}
-	signOut() {
+    }
+    signOut() {
 
-	}
+    }
 }
 poke.FbProfileManager = class {
-	constructor() {
+    constructor() {
 
-	}
-	tryCreateNewUser(uid,name) {
+    }
+    tryCreateNewUser(uid, name) {
 
-	}
-	beginListening(changeListener) {
+    }
+    beginListening(changeListener) {
 
-	}
-	stopListening() {
+    }
+    stopListening() {
 
-	}
-	updateName(name) {
+    }
+    updateName(name) {
 
-	}
-	addGame(game) {
+    }
+    addGame(game) {
 
-	}
-	removeGame(game) {
+    }
+    removeGame(game) {
 
-	}
+    }
 }
 poke.FbPokedexManager = class {
-	constructor(uid) {
+    constructor(uid) {
 
-	}
-	beginListening(changeListener) {
+    }
+    beginListening(changeListener) {
 
-	}
-	stopListening() {
+    }
+    stopListening() {
 
-	}
-	getPokemonAtIndex(index) {
+    }
+    getPokemonAtIndex(index) {
 
-	}
+    }
 }
 poke.FbPokemonManager = class {
-	constructor(pid) {
-		
-	}
-	addOwned() {
+    constructor(pid) {
 
-	}
-	beginListening(changeListener) {
+    }
+    addOwned() {
 
-	}
-	stopListening() {
+    }
+    beginListening(changeListener) {
 
-	}
-	removeOwned() {
+    }
+    stopListening() {
 
-	}
+    }
+    removeOwned() {
+
+    }
 }
 poke.FbTradesListManager = class {
-	constructor(uid) {
+    constructor(uid) {
 
-	}
-	createTrade(pokemon,description) {
+    }
+    createTrade(pokemon, description) {
 
-	}
-	beginListening(changeListener) {
+    }
+    beginListening(changeListener) {
 
-	}
-	stopListening() {
+    }
+    stopListening() {
 
-	}
-	getTradeAtIndex(index) {
+    }
+    getTradeAtIndex(index) {
 
-	}
+    }
 }
 poke.FbTradeDetailManager = class {
-	constructor() {
+    constructor() {
 
-	}
-	beginListening(changeListener) {
+    }
+    beginListening(changeListener) {
 
-	}
-	stopListening() {
+    }
+    stopListening() {
 
-	}
-	updateTrade(description) {
+    }
+    updateTrade(description) {
 
-	}
-	deleteTrade() {
+    }
+    deleteTrade() {
 
-	}
+    }
 }
 
 poke.Pokemon = class {
-	constructor(id,name,owned) {
+    constructor(id, name, owned) {
 
-	}
+    }
 }
 poke.Trade = class {
-	constructor(id,uid,pokemon,description) {
+    constructor(id, uid, pokemon, description) {
 
-	}
+    }
 }
 
 poke.initializePage = function() {
-	const urlParams = new URLSearchParams(window.location.search);
-	new poke.SideNavController();
-	if(document.querySelector("#pokemonDetailsPage")) {
-		const pid = urlParams.get("pid");
-		if(!pid) {
-			window.location.href = "/pokemon.html?pid=1";
-		} else {
-			poke.fbPokemonManager = new this.FbPokemonManager(pid);
-			new poke.PokemonPageController(pid);
-		}
-	}
+    const urlParams = new URLSearchParams(window.location.search);
+    new poke.SideNavController();
+    if (document.querySelector("#pokemonDetailsPage")) {
+        const pid = urlParams.get("pid");
+        if (!pid) {
+            window.location.href = "/pokemon.html?pid=1";
+        } else {
+            poke.fbPokemonManager = new this.FbPokemonManager(pid);
+            new poke.PokemonPageController(pid);
+        }
+    }
 }
 
-poke.main = function () {
-	poke.fbAuthManager = new poke.FbAuthManager();
-	poke.initializePage();
+poke.main = function() {
+    poke.fbAuthManager = new poke.FbAuthManager();
+    poke.initializePage();
+
+    console.log("Ready");
+
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/firebase.User
+            var displayName = user.displayName;
+            var email = user.email;
+            var photoURL = user.photoURL;
+            var isAnonymous = user.isAnonymous;
+            var phoneNumber = user.phoneNumber;
+            var uid = user.uid;
+            console.log("Signed in", uid);
+            console.log('displayName :>> ', displayName);
+            console.log('email :>> ', email);
+            console.log('photoURL :>> ', photoURL);
+            console.log('isAnonymous :>> ', isAnonymous);
+            console.log('phoneNumber :>> ', phoneNumber);
+            console.log('uid :>> ', uid);
+            // ...
+        } else {
+            // User is signed out
+            // ...
+        }
+    });
+
+    document.querySelector("#createAccountButton").onclick = (event) => {
+        console.log(`Create account for email: ${inputEmailEl.value}  password: ${inputPasswordEl.value}`);
+        firebase.auth().createUserWithEmailAndPassword(inputEmailEl.value, inputPasswordEl.value).catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log("Create user error", errorCode, errorMessage);
+        });
+    };
+
+    document.querySelector("#logInButton").onclick = (event) => {
+        console.log(`Log in to existing account for email: ${inputEmailEl.value}  password: ${inputPasswordEl.value}`);
+        firebase.auth().signInWithEmailAndPassword(inputEmailEl.value, inputPasswordEl.value).catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log("Log in existing user error", errorCode, errorMessage);
+        });
+    };
+
+    document.querySelector("#anonymousAuthButton").onclick = (event) => {
+        console.log(`Log in via Anonymous auth`);
+
+        firebase.auth().signInAnonymously().catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log("Log in existing user error", errorCode, errorMessage);
+        });
+    };
+
+    document.querySelector("#signOutButton").onclick = (event) => {
+        console.log("Sign Out called");
+        firebase.auth().signOut().then(function() {
+            // Sign-out successful.
+        }).catch(function(error) {
+            // An error happened.
+        });
+    };
+
+    rhit.startFirebaseAuthUi();
 };
+
+rhit.startFirebaseAuthUi = () => {
+    // Initialize the FirebaseUI Widget using Firebase.
+    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    ui.start('#firebaseui-auth-container', {
+        signInSuccessUrl: '/',
+        signInOptions: [
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+            firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
+        ],
+        // Other config options...
+    });
+}
 
 poke.main();
