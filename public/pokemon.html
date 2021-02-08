@@ -33,7 +33,7 @@
         <a id="menuSignOut" class="list-group-item"><i class="material-icons">logout</i>Sign Out</a>
       </ul>
     </div>
-    <main class="bmd-layout-content">
+    <main class="bmd-layout-content vert-scroll-hidden">
       <div id="pokemonDetailsPage" class="container page-container">
         <div id="pokedexList" class="vert-scroll-hidden" style="grid-template-columns: repeat(3, 6.66vw);grid-auto-rows: 6.66vw;">
           <div class="dex-icon"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"></div>
@@ -126,10 +126,12 @@
           <div id="evoStage1" class="evo-icon">
             <h3>Stage 1</h3>
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png">
+            <div></div>
           </div>
           <div id="evoStage2" class="evo-icon">
             <h3>Stage 2</h3>
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png">
+            <div>Level 16</div>
           </div>
           <div id="evoStage3" class="evo-icon">
             <h3>Stage 3</h3>
@@ -285,6 +287,53 @@
         </div>
         <div id="encountersContainer">
           <h2>Encounters</h2>
+          <div id="encounterList" class="vert-scroll-hidden">
+            <div class="encounter-item">
+              <img class="encounter-image" src="./images/encounters/pokeball.png">
+              <div class="encounter-type">Wild Encounter</div>
+              <div class="encounter-location">Viridian Forest</div>
+            </div>
+            <div class="encounter-item">
+              <img class="encounter-image" src="./images/encounters/premierball.png">
+              <div class="encounter-type">Gift Pokemon</div>
+              <div class="encounter-location">Viridian Forest</div>
+            </div>
+            <div class="encounter-item">
+              <img class="encounter-image" src="./images/encounters/healball.png">
+              <div class="encounter-type">Gift Egg</div>
+              <div class="encounter-location">Viridian Forest</div>
+            </div>
+            <div class="encounter-item">
+              <img class="encounter-image" src="./images/encounters/diveball.png">
+              <div class="encounter-type">Water Encounter</div>
+              <div class="encounter-location">Viridian Forest</div>
+            </div>
+            <div class="encounter-item">
+              <img class="encounter-image" src="./images/encounters/netball.png">
+              <div class="encounter-type">Fishing</div>
+              <div class="encounter-location">Viridian Forest</div>
+            </div>
+            <div class="encounter-item">
+              <img class="encounter-image" src="./images/encounters/nestball.png">
+              <div class="encounter-type">[COLOR] Flowers</div>
+              <div class="encounter-location">Viridian Forest</div>
+            </div>
+            <div class="encounter-item">
+              <img class="encounter-image" src="./images/encounters/duskball.png">
+              <div class="encounter-type">Breakable Rock</div>
+              <div class="encounter-location">Viridian Forest</div>
+            </div>
+            <div class="encounter-item">
+              <img class="encounter-image" src="./images/encounters/safariball.png">
+              <div class="encounter-type">Dark Grass</div>
+              <div class="encounter-location">Viridian Forest</div>
+            </div>
+            <div class="encounter-item">
+              <img class="encounter-image" src="./images/encounters/quickball.png">
+              <div class="encounter-type">Spot Encounter</div>
+              <div class="encounter-location">Viridian Forest</div>
+            </div>
+          </div>
         </div>
 
       </div>
