@@ -84,18 +84,18 @@ poke.PokemonPageController = class {
                 const spatkStat = data.stats[3].base_stat;
                 const spdefStat = data.stats[4].base_stat;
                 const spdStat = data.stats[5].base_stat;
-                document.querySelector("#hpValue").innerHTML = hpStat;
-                document.querySelector("#atkValue").innerHTML = atkStat;
-                document.querySelector("#defValue").innerHTML = defStat;
-                document.querySelector("#spatkValue").innerHTML = spatkStat;
-                document.querySelector("#spdefValue").innerHTML = spdefStat;
-                document.querySelector("#spdValue").innerHTML = spdStat;
-                document.querySelector(".hp-bar").style = `width:${100*hpStat/255}%;`;
-                document.querySelector(".atk-bar").style = `width:${100*atkStat/255}%;`;
-                document.querySelector(".def-bar").style = `width:${100*defStat/255}%;`;
-                document.querySelector(".spatk-bar").style = `width:${100*spatkStat/255}%;`;
-                document.querySelector(".spdef-bar").style = `width:${100*spdefStat/255}%;`;
-                document.querySelector(".spd-bar").style = `width:${100*spdStat/255}%;`;
+                document.querySelector("#hpNum").innerHTML = hpStat;
+                document.querySelector("#atkNum").innerHTML = atkStat;
+                document.querySelector("#defNum").innerHTML = defStat;
+                document.querySelector("#spatkNum").innerHTML = spatkStat;
+                document.querySelector("#spdefNum").innerHTML = spdefStat;
+                document.querySelector("#spdNum").innerHTML = spdStat;
+                document.querySelector("#hpBarFill").style = `width:${100*hpStat/255}%;`;
+                document.querySelector("#atkBarFill").style = `width:${100*atkStat/255}%;`;
+                document.querySelector("#defBarFill").style = `width:${100*defStat/255}%;`;
+                document.querySelector("#spatkBarFill").style = `width:${100*spatkStat/255}%;`;
+                document.querySelector("#spdefBarFill").style = `width:${100*spdefStat/255}%;`;
+                document.querySelector("#spdBarFill").style = `width:${100*spdStat/255}%;`;
             });
         document.querySelector("#pkmnID").innerHTML = `#${pid}`;
         document.querySelector("#pkmnSprite").src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pid}.png`;
@@ -320,7 +320,7 @@ poke.main = function() {
     rhit.startFirebaseAuthUi();
 };
 
-rhit.startFirebaseAuthUi = () => {
+poke.startFirebaseAuthUi = () => {
     // Initialize the FirebaseUI Widget using Firebase.
     var ui = new firebaseui.auth.AuthUI(firebase.auth());
     ui.start('#firebaseui-auth-container', {

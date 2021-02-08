@@ -32,7 +32,9 @@
 
 #pkmnSprite {
     width: 100%;
-    max-width: 450px;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #pkmnDescription {
@@ -97,6 +99,10 @@
     max-width: 255px;
     height: auto;
     background-color: blue;
+}
+.stat-bar-back {
+    height: 100%;
+    border: 1px solid;
 }
 
 #eggTable {
@@ -258,15 +264,45 @@ h2 {
 }
 
 @media(max-width:992px) {
-    #pokedexList, #gamesContainer, #evolutionContainer, #learnsetContainer, #encountersContainer {
+    #pokemonDetailsPage {
+        display: grid;
+        grid-template-columns: 100vw;
+    }
+
+    #pokedexList {
         display: none;
+    }
+
+    #gamesContainer {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    #detailContainer {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    
+    #evolutionContainer {
+        grid-column: 1;
+        grid-row: 3;
+    }
+    
+    #learnsetContainer {
+        grid-column: 1;
+        grid-row: 4;
+    }
+    
+    #encountersContainer {
+        grid-column: 1;
+        grid-row: 5;
     }
 }
 
 @media(min-width:992px) {
     #pokemonDetailsPage {
         display: grid;
-        grid-template-columns: 15vw 40vw 25vw 20vw;
+        grid-template-columns: 15vw 40vw 30vw 15vw;
         grid-template-rows: 10% 35% 55%;
     }
 
@@ -312,56 +348,56 @@ h2 {
 }
 
 
-.hp-row {
+#hpBar {
     background: #FF5959;
 }
 
-.atk-row {
+#atkBar {
     background: #F5AC78;
 }
 
-.def-row {
+#defBar {
     background: #FAE078;
 }
 
-.spatk-row {
+#spatkBar {
     background: #9DB7F5;
 }
 
-.spdef-row {
+#spdefBar {
     background: #A7DB8D;
 }
 
-.spd-row {
+#spdBar {
     background: #FA92B2;
 }
 
-.hp-bar {
+#hpBarFill {
     background: #FF0000;
     border-color: #A60000;
 }
 
-.atk-bar {
+#atkBarFill {
     background: #F08030;
     border-color: #9C531F;
 }
 
-.def-bar {
+#defBarFill {
     background: #F8D030;
     border-color: #A1871F;
 }
 
-.spatk-bar {
+#spatkBarFill {
     background: #6890F0;
     border-color: #445E9C;
 }
 
-.spdef-bar {
+#spdefBarFill {
     background: #78C850;
     border-color: #4E8234;
 }
 
-.spd-bar {
+#spdBarFill {
     background: #F85888;
     border-color: #A13959;
 }
