@@ -70,6 +70,7 @@ poke.PokedexPageController = class {
 }
 poke.PokemonPageController = class {
     constructor(pid) {
+        const nameElement = document.querySelector("#pkmnName");
         fetch(`https://pokeapi.co/api/v2/pokemon/${pid}`)
             .then(response => response.json())
             .then(data => {
@@ -83,9 +84,21 @@ poke.PokemonPageController = class {
                 const spatkStat = data.stats[3].base_stat;
                 const spdefStat = data.stats[4].base_stat;
                 const spdStat = data.stats[5].base_stat;
-                document.querySelector("#pkmnName").innerHTML = name;
+                nameElement.innerHTML = name;
                 document.querySelector("#pkmnHT").innerHTML = `HT: ${height} m`;
                 document.querySelector("#pkmnWT").innerHTML = `WT: ${weight} kg`;
+                if(Object.keys(data.types).length==1) {
+                    const type1 = data.types[0].type.name;
+                    document.querySelector("#type1").innerHTML = type1;
+                    
+                    document.querySelector("#type2").style.display = "none";
+                } else if (Object.keys(data.types).length==2) {
+                    const type1 = data.types[0].type.name;
+                    const type2 = data.types[1].type.name;
+                    document.querySelector("#type1").innerHTML = type1;
+                    document.querySelector("#type2").style.display = "block";
+                    document.querySelector("#type2").innerHTML = type2;
+                }
                 document.querySelector("#hpNum").innerHTML = hpStat;
                 document.querySelector("#atkNum").innerHTML = atkStat;
                 document.querySelector("#defNum").innerHTML = defStat;
@@ -116,6 +129,13 @@ poke.PokemonPageController = class {
                 }
                 const hatchCounter = data.hatch_counter;
                 document.querySelector("#eggSteps").innerHTML = `${hatchCounter*256} Steps`;
+                let genus;
+                data.genera.forEach(genera => {
+                    if(genera.language.name=="en") {
+                        genus = genera.genus;
+                    }
+                });
+                document.querySelector("#pkmnCategory").innerHTML = genus ? genus : "??? Pokémon";
             });
         document.querySelector("#pkmnID").innerHTML = `#${pid}`;
         document.querySelector("#pkmnSprite").src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pid}.png`;
