@@ -1,15 +1,101 @@
-#pokemonDetailsPage {
-    display: grid;
-
+.vert-scroll-hidden {
+    overflow-y: scroll;
+    scrollbar-width: none;
 }
 
-#pokedexList {
+.vert-scroll-hidden::-webkit-scrollbar {
+    display: none;
+}
+
+#pkmnID {
+    float: left;
+    width: 50%;
+}
+
+#pkmnName {
+    float: right;
+    text-transform: capitalize;
+    text-align: end;
+    width: 50%;
+}
+
+#pkmnSprite {
+    width: 100%;
+    max-width: 450px;
+}
+
+#pkmnDescription {
+    display: flex;
+    width: 85%;
+    margin: auto;
+    justify-content: space-around;
+    border: 1px solid;
+    font-size: 1em;
+}
+
+#pkmnTypes {
+    display: flex;
+    width: 50%;
+    margin: auto;
+    justify-content: space-between;
+    font-size: 1.25em;
+}
+
+.pkmnType {
+    border: 1px solid;
+}
+
+#pkmnAbilities {
+    display: flex;
+    width: 85%;
+    margin: auto;
+    justify-content: space-around;
+    font-size: 1.25em;
+    border: 1px solid;
+}
+
+#statAndEgg {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#statTable {
+    flex-grow: 2;
+    flex-basis: auto;
+    min-width: 350px;
+    border: 1px solid;
+}
+.stat-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    border: 1px solid;
+}
+.stat-name {
+    float: left;
+}
+.stat-num {
+    float: right;
+}
+.stat-bar {
+    margin-left: auto;
+    width: 100%;
+    max-width: 255px;
+    height: auto;
     background-color: blue;
-    overflow-y: auto;
 }
 
-#detailContainer {
-    background-color: green;
+#eggTable {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+    min-width: 100px;
+    border: 1px solid;
+    margin: auto;
 }
 
 #gamesContainer {
@@ -18,17 +104,131 @@
 
 #evolutionContainer {
     background-color: pink;
+    display: flex;
+    flex-direction: row;
 }
 
-#learnsetContainer {
-    background-color: purple;
+.evo-icon {
+    text-align: center;
 }
+
+.evo-icon > img {
+    max-width: 250px;
+    max-height: 250px;
+}
+
+h2 {
+    text-align: center;
+    background-color: #AAA;
+    height: 10%;
+}
+
+#learnsetType {
+    display: flex;
+    width: 80%;
+    margin: auto;
+    flex-direction: row;
+    justify-content: space-around;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#learnLevel, #learnTM, #learnEgg {
+    width: 20%;
+}
+
+#learnsetList {
+    height: calc(70% - 45px);
+    border: 1px solid black;
+}
+
+#learnsetLevelList {
+    height: 100%;
+}
+
+.learnset-row {
+    display: grid;
+    grid-template-columns: 15% 35% 20% 10% 10% 10%;
+    grid-template-rows: 50% 50%;
+    
+}
+.learn-row-item {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.learn-level {
+    grid-column: 1;
+    grid-row: 1 / 3;
+}
+.learn-move-name {
+    grid-column: 2;
+    grid-row: 1 / 3;
+}
+.learn-type {
+    grid-column: 3;
+    grid-row: 1;
+}
+.learn-category {
+    grid-column: 3;
+    grid-row: 2;
+}
+.learn-power {
+    grid-column: 4;
+    grid-row: 1 / 3;
+}
+.learn-accuracy {
+    grid-column: 5;
+    grid-row: 1 / 3;
+}
+.learn-pp {
+    grid-column: 6;
+    grid-row: 1 / 3;
+}
+
+#learnTopRow {
+    background-color: #999;
+}
+.learn-row-0 {
+    background-color: #CCC;
+}
+.learn-row-1 {
+    background-color: #FFF;
+}
+
 
 #encountersContainer {
     background-color: orange;
 }
 
+@media(max-width:992px) {
+    #pokedexList, #gamesContainer, #evolutionContainer, #learnsetContainer, #encountersContainer {
+        display: none;
+    }
+}
+
 @media(min-width:992px) {
+    #pokemonDetailsPage {
+        display: grid;
+        grid-template-columns: 20vw 40vw 20vw 20vw;
+        grid-template-rows: 10% 35% 55%;
+    }
+
+    #pokedexList {
+        display: grid;
+    }
+    
+    .dex-icon > img {
+        width: 100%;
+        height: 100%;
+    }
+
+
     #pokedexList {
         grid-column: 1;
         grid-row: 1 / 4;
@@ -61,3 +261,56 @@
 }
 
 
+.hp-row {
+    background: #FF5959;
+}
+
+.atk-row {
+    background: #F5AC78;
+}
+
+.def-row {
+    background: #FAE078;
+}
+
+.spatk-row {
+    background: #9DB7F5;
+}
+
+.spdef-row {
+    background: #A7DB8D;
+}
+
+.spd-row {
+    background: #FA92B2;
+}
+
+.hp-bar {
+    background: #FF0000;
+    border-color: #A60000;
+}
+
+.atk-bar {
+    background: #F08030;
+    border-color: #9C531F;
+}
+
+.def-bar {
+    background: #F8D030;
+    border-color: #A1871F;
+}
+
+.spatk-bar {
+    background: #6890F0;
+    border-color: #445E9C;
+}
+
+.spdef-bar {
+    background: #78C850;
+    border-color: #4E8234;
+}
+
+.spd-bar {
+    background: #F85888;
+    border-color: #A13959;
+}

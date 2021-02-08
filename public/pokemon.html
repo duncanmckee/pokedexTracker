@@ -35,8 +35,16 @@
     </div>
     <main class="bmd-layout-content">
       <div id="pokemonDetailsPage" class="container page-container">
-        <div id="pokedexList">
-          <div>Test</div>
+        <div id="pokedexList" class="vert-scroll-hidden" style="grid-template-columns: repeat(3, 6.66vw);grid-auto-rows: 6.66vw;">
+          <div class="dex-icon"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"></div>
+          <div class="dex-icon"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png"></div>
+          <div class="dex-icon"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png"></div>
+          <div class="dex-icon"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png"></div>
+          <div class="dex-icon"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png"></div>
+          <div class="dex-icon"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png"></div>
+          <div class="dex-icon"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png"></div>
+          <div class="dex-icon"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png"></div>
+          <div class="dex-icon"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png"></div>
         </div>
         <div id="detailContainer">
           <div id="detailHeader">
@@ -49,105 +57,234 @@
             <div id="pkmnHT">HT: ?.? m</div>
             <div id="pkmnWT">WT: ?.? kg</div>
           </div>
-          <div id="pkmnType">
-            <div id="pkmnPType">???</div>
-            <div id="pkmnSType">???</div>
+          <div id="pkmnTypes">
+            <div id="pkmnPType" class="pkmnType">???</div>
+            <div id="pkmnSType" class="pkmnType">???</div>
           </div>
-          <div id="pkmnAbility">
-            <div id="pkmnPAbility"></div>
-            <div id="pkmnSAbility"></div>
-            <div id="pkmnHAbility"></div>
+          <div id="pkmnAbilities">
+            <div id="pkmnPAbility">P</div>
+            <div id="pkmnSAbility">S</div>
+            <div id="pkmnHAbility">H</div>
           </div>
-
-          <table class="stat-table">
-            <tbody>
-              <tr class="stat-row hp-row">
-                <th class="stat-header">
+          <div id="statAndEgg">
+            <div id="statTable">
+              <div id="hpRow" class="stat-row">
+                <div>
                   <div class="stat-name">HP:</div>
-                  <div id="hpValue" class="stat-value">###</div>
-                </th>
-                <td class="stat-data">
-                  <div class="stat-bar hp-bar"></div>
-                </td>
-              </tr>
-              <tr class="stat-row atk-row">
-                <th class="stat-header">
+                  <div id="hpNum" class="stat-num">###</div>
+                </div>
+                <div id="hpBar" class="stat-bar"></div>
+              </div>
+              <div id="atkRow" class="stat-row">
+                <div>
                   <div class="stat-name">ATK:</div>
-                  <div id="atkValue" class="stat-value">###</div>
-                </th>
-                <td class="stat-data">
-                  <div class="stat-bar atk-bar"></div>
-                </td>
-              </tr>
-              <tr class="stat-row def-row">
-                <th class="stat-header">
+                  <div id="atkNum" class="stat-num">###</div>
+                </div>
+                <div id="atkBar" class="stat-bar"></div>
+              </div>
+              <div id="defRow" class="stat-row">
+                <div>
                   <div class="stat-name">DEF:</div>
-                  <div id="defValue" class="stat-value">###</div>
-                </th>
-                <td class="stat-data">
-                  <div class="stat-bar def-bar"></div>
-                </td>
-              </tr>
-              <tr class="stat-row spatk-row">
-                <th class="stat-header">
+                  <div id="defNum" class="stat-num">###</div>
+                </div>
+                <div id="defBar" class="stat-bar"></div>
+              </div>
+              <div id="spatkRow" class="stat-row">
+                <div>
                   <div class="stat-name">SPATK:</div>
-                  <div id="spatkValue" class="stat-value">###</div>
-                </th>
-                <td class="stat-data">
-                  <div class="stat-bar spatk-bar"></div>
-                </td>
-              </tr>
-              <tr class="stat-row spdef-row">
-                <th class="stat-header">
+                  <div id="spatkNum" class="stat-num">###</div>
+                </div>
+                <div id="spatkBar" class="stat-bar"></div>
+              </div>
+              <div id="spdefRow" class="stat-row">
+                <div>
                   <div class="stat-name">SPDEF:</div>
-                  <div id="spdefValue" class="stat-value">###</div>
-                </th>
-                <td class="stat-data">
-                  <div class="stat-bar spdef-bar"></div>
-                </td>
-              </tr>
-              <tr class="stat-row spd-row">
-                <th class="stat-header">
+                  <div id="spdefNum" class="stat-num">###</div>
+                </div>
+                <div id="spdefBar" class="stat-bar"></div>
+              </div>
+              <div id="spdRow" class="stat-row">
+                <div>
                   <div class="stat-name">SPD:</div>
-                  <div id="spdValue" class="stat-value">###</div>
-                </th>
-                <td class="stat-data">
-                  <div class="stat-bar spd-bar"></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="egg-table">
-            <tbody>
-              <tr id="eggPGroup" class="egg-row">
-                <th class="egg-header">
-                  <div class="egg-group">Egg Group 1</div>
-                </th>
-              </tr>
-              <tr id="eggSGroup" class="egg-row">
-                <th class="egg-header">
-                  <div class="egg-group">Egg Group 2</div>
-                </th>
-              </tr>
-              <tr id="eggSteps" class="egg-row">
-                <th class="egg-header">
-                  <div class="egg-group">#### Steps</div>
-                </th>
-              </tr>
-            </tbody>
-          </table>
+                  <div id="spdNum" class="stat-num">###</div>
+                </div>
+                <div id="spdBar" class="stat-bar"></div>
+              </div>
+            </div>
+            <div id="eggTable">
+              <div id="eggHeader">Egg Groups</div>
+              <div id="eggGroup1">Egg Group 1</div>
+              <div id="eggGroup2">Egg Group 1</div>
+              <div id="eggSteps">#### Steps</div>
+            </div>
+          </div>
         </div>
         <div id="gamesContainer">
-
+          test
         </div>
         <div id="evolutionContainer">
-
+          <div id="evoStage1" class="evo-icon">
+            <h3>Stage 1</h3>
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png">
+          </div>
+          <div id="evoStage2" class="evo-icon">
+            <h3>Stage 2</h3>
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png">
+          </div>
+          <div id="evoStage3" class="evo-icon">
+            <h3>Stage 3</h3>
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png">
+          </div>
         </div>
         <div id="learnsetContainer">
-
+          <h2>Learnset</h2>
+          <div id="learnsetType">
+            <img id="learnLevel" src="./images/RareCandy.png">
+            <img id="learnTM" src="./images/TM.png">
+            <img id="learnEgg" src="./images/Egg.png">
+          </div>
+          <div id="learnsetList">
+            <div id="learnTopRow" class="learnset-row">
+              <div class="learn-level learn-row-item"><div>Level</div></div>
+              <div class="learn-move-name learn-row-item">Move</div>
+              <div class="learn-type learn-row-item">Type</div>
+              <div class="learn-category learn-row-item">Category</div>
+              <div class="learn-power learn-row-item">Pwr</div>
+              <div class="learn-accuracy learn-row-item">Acc%</div>
+              <div class="learn-pp learn-row-item">PP</div>
+            </div>
+            <div id="learnsetLevelList" class="vert-scroll-hidden">
+              <div class="learnset-row learn-row-0">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-1">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-0">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-1">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-0">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-1">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-0">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-1">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-0">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-1">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-0">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-1">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-0">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+              <div class="learnset-row learn-row-1">
+                <div class="learn-level learn-row-item"><div>Level</div></div>
+                <div class="learn-move-name learn-row-item">Move</div>
+                <div class="learn-type learn-row-item">Type</div>
+                <div class="learn-category learn-row-item">Category</div>
+                <div class="learn-power learn-row-item">Pwr</div>
+                <div class="learn-accuracy learn-row-item">Acc%</div>
+                <div class="learn-pp learn-row-item">PP</div>
+              </div>
+            </div>
+          </div>
         </div>
         <div id="encountersContainer">
-
+          <h2>Encounters</h2>
         </div>
 
       </div>
