@@ -337,16 +337,16 @@ poke.main = function() {
         });
     };
 
-    document.querySelector("#anonymousAuthButton").onclick = (event) => {
-        console.log(`Log in via Anonymous auth`);
+    // document.querySelector("#anonymousAuthButton").onclick = (event) => {
+    //     console.log(`Log in via Anonymous auth`);
 
-        firebase.auth().signInAnonymously().catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.log("Log in existing user error", errorCode, errorMessage);
-        });
-    };
+    //     firebase.auth().signInAnonymously().catch(function(error) {
+    //         // Handle Errors here.
+    //         var errorCode = error.code;
+    //         var errorMessage = error.message;
+    //         console.log("Log in existing user error", errorCode, errorMessage);
+    //     });
+    // };
 
     document.querySelector("#signOutButton").onclick = (event) => {
         console.log("Sign Out called");
@@ -368,8 +368,6 @@ poke.startFirebaseAuthUi = () => {
         signInOptions: [
             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
             firebase.auth.EmailAuthProvider.PROVIDER_ID,
-            firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-            firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
         ],
         // Other config options...
     });
