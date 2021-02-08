@@ -74,16 +74,18 @@ poke.PokemonPageController = class {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                let name = data.name;
-                document.querySelector("#pkmnName").innerHTML = name;
-                document.querySelector("#pkmnHT").innerHTML = `HT: ${data.weight/10} m`;
-                document.querySelector("#pkmnWT").innerHTML = `WT: ${data.height/10} kg`;
+                const name = data.name;
+                const height = data.height/10;
+                const weight = data.weight/10;
                 const hpStat = data.stats[0].base_stat;
                 const atkStat = data.stats[1].base_stat;
                 const defStat = data.stats[2].base_stat;
                 const spatkStat = data.stats[3].base_stat;
                 const spdefStat = data.stats[4].base_stat;
                 const spdStat = data.stats[5].base_stat;
+                document.querySelector("#pkmnName").innerHTML = name;
+                document.querySelector("#pkmnHT").innerHTML = `HT: ${height} m`;
+                document.querySelector("#pkmnWT").innerHTML = `WT: ${weight} kg`;
                 document.querySelector("#hpNum").innerHTML = hpStat;
                 document.querySelector("#atkNum").innerHTML = atkStat;
                 document.querySelector("#defNum").innerHTML = defStat;
@@ -96,6 +98,24 @@ poke.PokemonPageController = class {
                 document.querySelector("#spatkBarFill").style = `width:${100*spatkStat/255}%;`;
                 document.querySelector("#spdefBarFill").style = `width:${100*spdefStat/255}%;`;
                 document.querySelector("#spdBarFill").style = `width:${100*spdStat/255}%;`;
+            });
+        fetch(`https://pokeapi.co/api/v2/pokemon-species/${pid}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if(Object.keys(data.egg_groups).length==1) {
+                    const eggGroup1 = data.egg_groups[0].name;
+                    document.querySelector("#eggGroup1").innerHTML = eggGroup1;
+                    document.querySelector("#eggGroup2").style.display = "none";
+                } else if(Object.keys(data.egg_groups).length==2) {
+                    const eggGroup1 = data.egg_groups[0].name;
+                    const eggGroup2 = data.egg_groups[1].name;
+                    document.querySelector("#eggGroup1").innerHTML = eggGroup1;
+                    document.querySelector("#eggGroup2").style.display = "block";
+                    document.querySelector("#eggGroup2").innerHTML = eggGroup2;
+                }
+                const hatchCounter = data.hatch_counter;
+                document.querySelector("#eggSteps").innerHTML = `${hatchCounter*256} Steps`;
             });
         document.querySelector("#pkmnID").innerHTML = `#${pid}`;
         document.querySelector("#pkmnSprite").src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pid}.png`;

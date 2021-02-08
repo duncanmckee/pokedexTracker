@@ -4,6 +4,10 @@
     padding-right: 0;
 }
 
+.caps {
+    text-transform: capitalize;
+}
+
 .vert-scroll-hidden {
     overflow-y: scroll;
     scrollbar-width: none;
@@ -25,7 +29,6 @@
 
 #pkmnName {
     float: right;
-    text-transform: capitalize;
     text-align: end;
     width: 50%;
 }
