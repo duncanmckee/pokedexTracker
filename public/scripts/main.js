@@ -1,5 +1,7 @@
 var poke = poke || {};
 
+poke.NUM_POKEMON = 898;
+
 poke.FB_COLLECTION_USER = "User";
 poke.FB_USER_KEY_NAME = "name";
 poke.FB_USER_KEY_CONTACT = "contactEmail";
@@ -18,6 +20,103 @@ poke.fbPokemonManager = null;
 poke.fbTradesListManager = null;
 poke.fbTradeDetailManager = null;
 
+
+poke.MoveData = class {
+    constructor(learnType, moveName, learnLevel, gameName) {
+        this.learnType = learnType;
+        this.moveName = moveName;
+        this.learnLevel = learnLevel;
+        this.moveGame = "";
+        this.moveGameA = "";
+        this.moveGameB = "";
+        switch(gameName) {
+            case "red-blue":
+                this.moveGameA = "Red";
+                this.moveGameB = "Blue";
+                break;
+            case "yellow":
+                this.moveGame = "Yellow";
+                break;
+            case "gold-silver":
+                this.moveGameA = "Gold";
+                this.moveGameB = "Silver";
+                break;
+            case "crystal":
+                this.moveGame = "Crystal";
+                break;
+            case "ruby-sapphire":
+                this.moveGameA = "Ruby";
+                this.moveGameB = "Sapphire";
+                break;
+            case "emerald":
+                this.moveGame = "Emerald";
+                break;
+            case "firered-leafgreen":
+                this.moveGameA = "Fire Red";
+                this.moveGameB = "Leaf Green";
+                break;
+            case "diamond-pearl":
+                this.moveGameA = "Diamond";
+                this.moveGameB = "Pearl";
+                break;
+            case "platinum":
+                this.moveGame = "Platinum";
+                break;
+            case "heartgold-soulsilver":
+                this.moveGameA = "Heart Gold";
+                this.moveGameB = "Soul Silver";
+                break;
+            case "black-white":
+                this.moveGameA = "Black";
+                this.moveGameB = "White";
+                break;
+            case "black-2-white-2":
+                this.moveGameA = "Black 2";
+                this.moveGameB = "White 2";
+                break;
+            case "colosseum":
+                this.moveGame = "Colosseum";
+                break;
+            case "xd":
+                this.moveGame = "XD";
+                break;
+            case "x-y":
+                this.moveGameA = "X";
+                this.moveGameB = "Y";
+                break;
+            case "omega-ruby-alpha-sapphire":
+                this.moveGameA = "Omega Ruby";
+                this.moveGameB = "Alpha Sapphire";
+                break;
+            case "sun-moon":
+                this.moveGameA = "Sun";
+                this.moveGameB = "Moon";
+                break;
+            case "ultra-sun-ultra-moon":
+                this.moveGameA = "Ultra Sun";
+                this.moveGameB = "Ultra Moon";
+                break;
+            default:
+                this.moveGame = "ERROR";
+                break;
+        }
+    }
+
+    getMoveRow() {
+        if(this.moveGame!="") {
+            return `<div class="learn-type learn-row-item caps"><div>${this.learnType}</div></div>
+            <div class="learn-move-name learn-row-item caps">${this.moveName}</div>
+            <div class="learn-level learn-row-item">${this.learnLevel}</div>
+            <div class="learn-game learn-row-item">${this.moveGame}</div>`;
+        } else {
+            return `<div class="learn-type learn-row-item caps"><div>${this.learnType}</div></div>
+        <div class="learn-move-name learn-row-item caps">${this.moveName}</div>
+        <div class="learn-level learn-row-item">${this.learnLevel}</div>
+        <div class="learn-game-A learn-row-item">${this.moveGameA}</div>
+        <div class="learn-game-B learn-row-item">${this.moveGameB}</div>`;
+        }
+    }
+}
 
 poke.SideNavController = class {
     constructor() {
@@ -69,12 +168,26 @@ poke.PokedexPageController = class {
     }
 }
 poke.PokemonPageController = class {
-    constructor(pid) {
-        const nameElement = document.querySelector("#pkmnName");
+    constructor(pid=null, versionGroupIn=null, versionIn=null) {
+        const pokedexList = document.querySelector("#pokedexList");
+        pokedexList.innerHTML = "";
+        for(let id = 1; id <= poke.NUM_POKEMON; id++) {
+            const pokeIcon = document.createElement("div")
+            pokeIcon.classList.add("dex-icon");
+            pokeIcon.innerHTML = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png">`;
+            pokeIcon.onclick = (event) => {
+                if(versionIn) {
+                    window.location.href = `/pokemon.html?pid=${id}&game=${versionIn}`;
+                } else {
+                    window.location.href = `/pokemon.html?pid=${id}`;
+                }
+            };
+            pokedexList.appendChild(pokeIcon);
+        }
+
         fetch(`https://pokeapi.co/api/v2/pokemon/${pid}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 const name = data.name;
                 const height = data.height/10;
                 const weight = data.weight/10;
@@ -84,7 +197,7 @@ poke.PokemonPageController = class {
                 const spatkStat = data.stats[3].base_stat;
                 const spdefStat = data.stats[4].base_stat;
                 const spdStat = data.stats[5].base_stat;
-                nameElement.innerHTML = name;
+                document.querySelector("#pkmnName").innerHTML = name;
                 document.querySelector("#pkmnHT").innerHTML = `HT: ${height} m`;
                 document.querySelector("#pkmnWT").innerHTML = `WT: ${weight} kg`;
                 if(Object.keys(data.types).length==1) {
@@ -111,11 +224,71 @@ poke.PokemonPageController = class {
                 document.querySelector("#spatkBarFill").style = `width:${100*spatkStat/255}%;`;
                 document.querySelector("#spdefBarFill").style = `width:${100*spdefStat/255}%;`;
                 document.querySelector("#spdBarFill").style = `width:${100*spdStat/255}%;`;
+                const moves = data.moves;
+                const learnsetList = document.querySelector("#learnsetSubList");
+                learnsetList.innerHTML = "";
+                let index = 0;
+                let movesData = [];
+                for(let i = 0; i < moves.length; i++) {
+                    const moveName = moves[i].move.name.replaceAll("-"," ");
+                    const versionGroups = moves[i].version_group_details;
+                    for(let j = 0; j < versionGroups.length; j++) {
+                        const learnType = versionGroups[j].move_learn_method.name.replaceAll("-"," ");
+                        const learnLevel = versionGroups[j].level_learned_at;
+                        const moveGame = versionGroups[j].version_group.name;
+                        if(versionGroupIn && moveGame != versionGroupIn) {
+                            continue;
+                        }
+                        movesData[index] = new poke.MoveData(learnType, moveName, learnLevel, moveGame);;
+                        index = index + 1;
+                    }
+                }
+                movesData.sort((a, b) => {
+                    if(a.learnType==b.learnType) {
+                        return a.learnLevel - b.learnLevel;
+                    }
+                    let result = 0;
+                    switch(a.learnType) {
+                        case "level up":
+                            result += 1;
+                            break;
+                        case "egg":
+                            result += 2;
+                            break;
+                        case "tutor":
+                            result += 3;
+                            break;
+                        case "machine":
+                            result += 4;
+                            break;
+                    }
+                    switch(b.learnType) {
+                        case "level up":
+                            result -= 1;
+                            break;
+                        case "egg":
+                            result -= 2;
+                            break;
+                        case "tutor":
+                            result -= 3;
+                            break;
+                        case "machine":
+                            result -= 4;
+                            break;
+                    }
+                    return result;
+                })
+                for(let x = 0; x < index; x++) {
+                    const rowDiv = document.createElement("div");
+                    rowDiv.classList.add("learnset-row");
+                    rowDiv.classList.add(`learn-row-${x%2}`);
+                    rowDiv.innerHTML = movesData[x].getMoveRow();
+                    learnsetList.appendChild(rowDiv);
+                }
             });
         fetch(`https://pokeapi.co/api/v2/pokemon-species/${pid}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if(Object.keys(data.egg_groups).length==1) {
                     const eggGroup1 = data.egg_groups[0].name;
                     document.querySelector("#eggGroup1").innerHTML = eggGroup1;
@@ -136,6 +309,120 @@ poke.PokemonPageController = class {
                     }
                 });
                 document.querySelector("#pkmnCategory").innerHTML = genus ? genus : "??? Pokémon";
+                fetch(data.evolution_chain.url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const evolutionList = document.querySelector("#evolutionContainer");
+                        let stages = [];
+                        let index = 0;
+                        // Actually pull the evolutions!
+                    });
+            });
+        fetch(`https://pokeapi.co/api/v2/pokemon/${pid}/encounters`)
+            .then(response => response.json())
+            .then(encounters => {
+                const encounterList = document.querySelector("#encounterList");
+                encounterList.innerHTML = "";
+                for(let i = 0; i < encounters.length; i++) {
+                    const encounterLocation = encounters[i].location_area.name.replaceAll("-"," ").replace("area","");
+                    const versionDetails = encounters[i].version_details;
+                    for(let j = 0; j < versionDetails.length; j++) {
+                        const version = versionDetails[j].version.name;
+                        if(versionIn && version != versionIn) {
+                            continue;
+                        }
+                        const encounterDetails = versionDetails[j].encounter_details;
+                        for(let l = 0; l < encounterDetails.length; l++) {
+                            const method = encounterDetails[l].method.name;
+                            let methodText = "";
+                            let imgSrc = "./images/encounters/pokeball.png";
+                            switch(method) {
+                                case "walk":
+                                    methodText = "Walking";
+                                    imgSrc = "./images/encounters/pokeball.png";
+                                    break;
+                                case "old-rod":
+                                    methodText = "Old Rod";
+                                    imgSrc = "./images/encounters/netball.png";
+                                    break;
+                                case "good-rod":
+                                    methodText = "Good Rod";
+                                    imgSrc = "./images/encounters/netball.png";
+                                    break;
+                                case "super-rod":
+                                    methodText = "Super Rod";
+                                    imgSrc = "./images/encounters/netball.png";
+                                    break;
+                                case "surf":
+                                    methodText = "Surfing";
+                                    imgSrc = "./images/encounters/diveball.png";
+                                    break;
+                                case "rock-smash":
+                                    methodText = "Rock Smash";
+                                    imgSrc = "./images/encounters/duskball.png";
+                                    break;
+                                case "headbutt":
+                                    methodText = "Headbutt";
+                                    imgSrc = "./images/encounters/safariball.png";
+                                    break;
+                                case "dark-grass":
+                                    methodText = "Dark Grass";
+                                    imgSrc = "./images/encounters/safariball.png";
+                                    break;
+                                case "grass-spots":
+                                    methodText = "Grass Spot";
+                                    imgSrc = "./images/encounters/quickball.png";
+                                    break;
+                                case "cave-spots":
+                                    methodText = "Cave Spot";
+                                    imgSrc = "./images/encounters/quickball.png";
+                                    break;
+                                case "bridge-spots":
+                                    methodText = "Bridge Spot";
+                                    imgSrc = "./images/encounters/quickball.png";
+                                    break;
+                                case "super-rod-spots":
+                                    methodText = "Fishing Spot";
+                                    imgSrc = "./images/encounters/quickball.png";
+                                    break;
+                                case "surf-spots":
+                                    methodText = "Surfing Spot";
+                                    imgSrc = "./images/encounters/quickball.png";
+                                    break;
+                                case "yellow-flower":
+                                    methodText = "Yellow Flowers";
+                                    imgSrc = "./images/encounters/nestball.png";
+                                    break;
+                                case "purple-flower":
+                                    methodText = "Purple Flowers";
+                                    imgSrc = "./images/encounters/nestball.png";
+                                    break;
+                                case "red-flowers":
+                                    methodText = "Red Flowers";
+                                    imgSrc = "./images/encounters/nestball.png";
+                                    break;
+                                case "rough-terrain":
+                                    methodText = "Rough Terrain";
+                                    imgSrc = "./images/encounters/duskball.png";
+                                    break;
+                                case "gift":
+                                    methodText = "Gift";
+                                    imgSrc = "./images/encounters/premierball.png";
+                                    break;
+                                case "gift-egg":
+                                    methodText = "Gift Egg";
+                                    imgSrc = "./images/encounters/healball.png";
+                                    break;
+                            }
+                            const rowDiv = document.createElement("div");
+                            rowDiv.classList.add("encounter-item");
+                            rowDiv.innerHTML = `<img class="encounter-image" src="${imgSrc}">
+                            <div class="encounter-type">${methodText}</div>
+                            <div class="encounter-location caps">${encounterLocation}</div>`;
+                            encounterList.appendChild(rowDiv);
+                        }
+                    }
+                }
             });
         document.querySelector("#pkmnID").innerHTML = `#${pid}`;
         document.querySelector("#pkmnSprite").src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pid}.png`;
@@ -275,17 +562,64 @@ poke.Trade = class {
     }
 }
 
+poke.gameToVersionGroup = function(game) {
+    if(!game) {
+        return null;
+    }
+    switch(game) {
+        case "red":
+        case "blue":
+            return "red-blue";
+        case "yellow":
+            return "yellow";
+        case "gold":
+        case "silver":
+            return "gold-silver";
+        case "crystal":
+            return "crystal";
+        case "ruby":
+        case "sapphire":
+            return "ruby-sapphire";
+        case "emerald":
+            return "emerald";
+        case "firered":
+        case "leafgreen":
+            return "firered-leafgreen";
+        case "diamond":
+        case "pearl":
+            return "diamond-pearl";
+        case "platinum":
+            return "platinum";
+        case "heartgold":
+        case "soulsilver":
+            return "heartgold-soulsilver";
+        case "black":
+        case "white":
+            return "black-white";
+        case "black-2":
+        case "white-2":
+            return "black-2-white-2";
+        case "x":
+        case "y":
+            return "x-y";
+        case "sun":
+        case "moon":
+            return "sun-moon"
+        case "ultra-sun":
+        case "ultra-moon":
+            return "ultra-sun-ultra-moon";
+    }
+    return null;
+}
+
 poke.initializePage = function() {
     const urlParams = new URLSearchParams(window.location.search);
     new poke.SideNavController();
     if (document.querySelector("#pokemonDetailsPage")) {
         const pid = urlParams.get("pid");
-        if (!pid) {
-            window.location.href = "/pokemon.html?pid=1";
-        } else {
-            poke.fbPokemonManager = new this.FbPokemonManager(pid);
-            new poke.PokemonPageController(pid);
-        }
+        const game = urlParams.get("game");
+        poke.fbPokemonManager = new this.FbPokemonManager(pid);
+        new poke.PokemonPageController(pid, poke.gameToVersionGroup(game), game);
     }
 }
 
