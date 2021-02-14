@@ -29,13 +29,12 @@
       <ul class="list-group">
         <a id="menuProfile" class="list-group-item"><i class="material-icons">account_box</i>My Profile</a>
         <a id="menuShowAll" class="list-group-item"><i class="material-icons"></i>Pokédex</a>
-        <a id="menuShowMy" class="list-group-item"><i class="material-icons"></i>My Pokédex</a>
         <a id="menuSignOut" class="list-group-item"><i class="material-icons">logout</i>Sign Out</a>
       </ul>
     </div>
     <main class="bmd-layout-content vert-scroll-hidden">
       <div id="pokemonDetailsPage" class="container page-container">
-        <div id="pokedexList" class="vert-scroll-hidden" style="grid-template-columns: repeat(3, 5vw);grid-auto-rows: 5vw;">
+        <div id="pokedexList" class="vert-scroll-hidden">
         </div>
         <div id="detailContainer">
           <div id="detailHeader">
@@ -53,9 +52,9 @@
             <div id="type2" class="pkmnType caps">???</div>
           </div>
           <div id="pkmnAbilities">
-            <div id="pkmnPAbility">P</div>
-            <div id="pkmnSAbility">S</div>
-            <div id="pkmnHAbility">H</div>
+            <div id="pkmnPAbility" class="caps"></div>
+            <div id="pkmnSAbility" class="caps"></div>
+            <div id="pkmnHAbility" class="caps"></div>
           </div>
           <div id="statAndEgg">
             <div id="statTable">
@@ -114,20 +113,6 @@
           test
         </div>
         <div id="evolutionContainer">
-          <div id="evoStage1" class="evo-icon">
-            <h3>Stage 1</h3>
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png">
-            <div></div>
-          </div>
-          <div id="evoStage2" class="evo-icon">
-            <h3>Stage 2</h3>
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png">
-            <div>Level 16</div>
-          </div>
-          <div id="evoStage3" class="evo-icon">
-            <h3>Stage 3</h3>
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png">
-          </div>
         </div>
         <div id="learnsetContainer">
           <h2>Learnset</h2>
