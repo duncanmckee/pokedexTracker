@@ -15,7 +15,6 @@ poke.FB_TRADE_KEY_DESCRIPTION = "requestText";
 
 poke.fbAuthManager = null;
 poke.fbProfileManager = null;
-poke.fbPokedexManager = null;
 poke.fbPokemonManager = null;
 poke.fbTradesListManager = null;
 poke.fbTradeDetailManager = null;
@@ -159,14 +158,6 @@ poke.ProfilePageController = class {
 
     }
 }
-poke.PokedexPageController = class {
-    constructor() {
-
-    }
-    updatePage() {
-
-    }
-}
 poke.PokemonPageController = class {
     constructor(pid=null, versionGroupIn=null, versionIn=null) {
         const pokemonDetailsPage = document.querySelector("#pokemonDetailsPage");
@@ -176,7 +167,7 @@ poke.PokemonPageController = class {
             const idstay = id;
             const pokeIcon = document.createElement("div")
             pokeIcon.classList.add("dex-icon");
-            pokeIcon.innerHTML = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idstay}.png">`;
+            pokeIcon.innerHTML = `<img id="pkmn${id}" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idstay}.png">`;
             pokeIcon.onclick = (event) => {
                 if(pid==idstay) {
                     window.location.href = "/pokemon.html";
@@ -499,10 +490,17 @@ poke.PokemonPageController = class {
             pokemonDetailsPage.classList.add("pokedex-view");
         }
 
-        
+        poke.fbPokemonManager.beginListening(this.updatePage.bind(this));
     }
     updatePage() {
-
+        for(let id = 1; id <= poke.NUM_POKEMON; id++) {
+            const pokeIcon = document.querySelector(`#pkmn${id}`);
+            if(poke.fbPokemonManager.ownsPokemon(id)) {
+                pokeIcon.classList.remove("not-owned-poke");
+            } else {
+                pokeIcon.classList.add("not-owned-poke");
+            }
+        }
     }
 }
 poke.TradesListPageController = class {
@@ -559,35 +557,32 @@ poke.FbProfileManager = class {
 
     }
 }
-poke.FbPokedexManager = class {
-    constructor(uid) {
-
-    }
-    beginListening(changeListener) {
-
-    }
-    stopListening() {
-
-    }
-    getPokemonAtIndex(index) {
-
-    }
-}
 poke.FbPokemonManager = class {
     constructor(pid) {
-
+        this._pid = pid;
+        this._pokedex = {};
+        this._unsubscribe = null;
+        this._pokedexRef = firebase.firestore().collection(poke.FB_COLLECTION_USER).doc("example");
     }
-    addOwned() {
-
+    addOwned(pid) {
+        this._pokedexRef.collection(poke.FB_USER_KEY_POKEMON).add({[pid]: true});
     }
     beginListening(changeListener) {
-
+        this._unsubscribe = this._pokedexRef.onSnapshot((doc) => {
+            if(doc.exists) {
+                this._pokedex = doc.get(poke.FB_USER_KEY_POKEMON);
+                changeListener();
+            }
+        })
     }
     stopListening() {
-
+        if(this._unsubscribe) this._unsubscribe();
     }
-    removeOwned() {
-
+    removeOwned(pid) {
+        this._pokedexRef.collection(poke.FB_USER_KEY_POKEMON).add({[pid]: false});
+    }
+    ownsPokemon(pid) {
+        return !!this._pokedex[pid];
     }
 }
 poke.FbTradesListManager = class {
