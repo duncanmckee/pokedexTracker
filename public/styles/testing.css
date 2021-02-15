@@ -130,7 +130,15 @@
 }
 
 #gamesContainer {
-    background-color: red;
+    overflow-x: scroll;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.game-icon {
+    padding-right: 5px;
+    height: 100%;
 }
 
 #evolutionContainer {
