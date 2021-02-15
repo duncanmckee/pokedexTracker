@@ -29,7 +29,7 @@ poke.MoveData = class {
         this.moveGame = "";
         this.moveGameA = "";
         this.moveGameB = "";
-        switch(gameName) {
+        switch (gameName) {
             case "red-blue":
                 this.moveGameA = "Red";
                 this.moveGameB = "Blue";
@@ -103,7 +103,7 @@ poke.MoveData = class {
     }
 
     getMoveRow() {
-        if(this.moveGame!="") {
+        if (this.moveGame != "") {
             return `<div class="learn-type learn-row-item caps"><div>${this.learnType}</div></div>
             <div class="learn-move-name learn-row-item caps">${this.moveName}</div>
             <div class="learn-level learn-row-item">${this.learnLevel}</div>
@@ -168,19 +168,19 @@ poke.PokedexPageController = class {
     }
 }
 poke.PokemonPageController = class {
-    constructor(pid=null, versionGroupIn=null, versionIn=null) {
+    constructor(pid = null, versionGroupIn = null, versionIn = null) {
         const pokemonDetailsPage = document.querySelector("#pokemonDetailsPage");
         const pokedexList = document.querySelector("#pokedexList");
         pokedexList.innerHTML = "";
-        for(let id = 1; id <= poke.NUM_POKEMON; id++) {
+        for (let id = 1; id <= poke.NUM_POKEMON; id++) {
             const idstay = id;
             const pokeIcon = document.createElement("div")
             pokeIcon.classList.add("dex-icon");
             pokeIcon.innerHTML = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idstay}.png">`;
             pokeIcon.onclick = (event) => {
-                if(pid==idstay) {
+                if (pid == idstay) {
                     window.location.href = "/pokemon.html";
-                } else if(versionIn) {
+                } else if (versionIn) {
                     window.location.href = `/pokemon.html?pid=${idstay}&game=${versionIn}`;
                 } else {
                     window.location.href = `/pokemon.html?pid=${idstay}`;
@@ -190,12 +190,12 @@ poke.PokemonPageController = class {
         }
 
         const gameIcons = document.querySelectorAll(".game-icon");
-        for(let i = 0; i < gameIcons.length; i++) {
+        for (let i = 0; i < gameIcons.length; i++) {
             const gameIcon = gameIcons[i];
             const gameName = gameIcon.dataset.version;
             gameIcon.onclick = (event) => {
-                if(versionIn) {
-                    if(versionIn==gameName) {
+                if (versionIn) {
+                    if (versionIn == gameName) {
                         window.location.href = `/pokemon.html?pid=${pid}`;
                     } else {
                         window.location.href = `/pokemon.html?pid=${pid}&game=${gameName}`
@@ -203,18 +203,18 @@ poke.PokemonPageController = class {
                 } else {
                     window.location.href = `/pokemon.html?pid=${pid}&game=${gameName}`
                 }
-                
+
             }
         }
 
-        if(pid) {
+        if (pid) {
             pokemonDetailsPage.classList.add("pokemon-view");
             fetch(`https://pokeapi.co/api/v2/pokemon/${pid}`)
                 .then(response => response.json())
                 .then(data => {
                     const name = data.name;
-                    const height = data.height/10;
-                    const weight = data.weight/10;
+                    const height = data.height / 10;
+                    const weight = data.weight / 10;
                     const hpStat = data.stats[0].base_stat;
                     const atkStat = data.stats[1].base_stat;
                     const defStat = data.stats[2].base_stat;
@@ -224,12 +224,12 @@ poke.PokemonPageController = class {
                     document.querySelector("#pkmnName").innerHTML = name;
                     document.querySelector("#pkmnHT").innerHTML = `HT: ${height} m`;
                     document.querySelector("#pkmnWT").innerHTML = `WT: ${weight} kg`;
-                    if(Object.keys(data.types).length==1) {
+                    if (Object.keys(data.types).length == 1) {
                         const type1 = data.types[0].type.name;
                         document.querySelector("#type1").innerHTML = type1;
-                        
+
                         document.querySelector("#type2").style.display = "none";
-                    } else if (Object.keys(data.types).length==2) {
+                    } else if (Object.keys(data.types).length == 2) {
                         const type1 = data.types[0].type.name;
                         const type2 = data.types[1].type.name;
                         document.querySelector("#type1").innerHTML = type1;
@@ -237,11 +237,11 @@ poke.PokemonPageController = class {
                         document.querySelector("#type2").innerHTML = type2;
                     }
                     const abilities = data.abilities;
-                    for(let i = 0; i < abilities.length; i++) {
+                    for (let i = 0; i < abilities.length; i++) {
                         const ability = abilities[i].ability.name;
                         const slot = abilities[i].slot;
                         let abilityType = "";
-                        switch(slot) {
+                        switch (slot) {
                             case 1:
                                 abilityType = "P";
                                 break;
@@ -271,14 +271,14 @@ poke.PokemonPageController = class {
                     learnsetList.innerHTML = "";
                     let index = 0;
                     let movesData = [];
-                    for(let i = 0; i < moves.length; i++) {
-                        const moveName = moves[i].move.name.replaceAll("-"," ");
+                    for (let i = 0; i < moves.length; i++) {
+                        const moveName = moves[i].move.name.replaceAll("-", " ");
                         const versionGroups = moves[i].version_group_details;
-                        for(let j = 0; j < versionGroups.length; j++) {
-                            const learnType = versionGroups[j].move_learn_method.name.replaceAll("-"," ");
+                        for (let j = 0; j < versionGroups.length; j++) {
+                            const learnType = versionGroups[j].move_learn_method.name.replaceAll("-", " ");
                             const learnLevel = versionGroups[j].level_learned_at;
                             const moveGame = versionGroups[j].version_group.name;
-                            if(versionGroupIn && moveGame != versionGroupIn) {
+                            if (versionGroupIn && moveGame != versionGroupIn) {
                                 continue;
                             }
                             movesData[index] = new poke.MoveData(learnType, moveName, learnLevel, moveGame);;
@@ -286,11 +286,11 @@ poke.PokemonPageController = class {
                         }
                     }
                     movesData.sort((a, b) => {
-                        if(a.learnType==b.learnType) {
+                        if (a.learnType == b.learnType) {
                             return a.learnLevel - b.learnLevel;
                         }
                         let result = 0;
-                        switch(a.learnType) {
+                        switch (a.learnType) {
                             case "level up":
                                 result += 1;
                                 break;
@@ -304,7 +304,7 @@ poke.PokemonPageController = class {
                                 result += 4;
                                 break;
                         }
-                        switch(b.learnType) {
+                        switch (b.learnType) {
                             case "level up":
                                 result -= 1;
                                 break;
@@ -320,7 +320,7 @@ poke.PokemonPageController = class {
                         }
                         return result;
                     })
-                    for(let x = 0; x < index; x++) {
+                    for (let x = 0; x < index; x++) {
                         const rowDiv = document.createElement("div");
                         rowDiv.classList.add("learnset-row");
                         rowDiv.classList.add(`learn-row-${x%2}`);
@@ -338,22 +338,22 @@ poke.PokemonPageController = class {
                             let stages = [];
                             let chain = [];
                             // Actually pull the evolutions!
-                            chain.push({"data": data.chain, "stage": 1});
-                            while(chain.length != 0) {
+                            chain.push({ "data": data.chain, "stage": 1 });
+                            while (chain.length != 0) {
                                 const current = chain.shift();
                                 const evo = current.data;
                                 const stage = current.stage;
                                 const speciesURL = evo.species.url;
-                                const speciesID = speciesURL.substring(42, speciesURL.length-1);
+                                const speciesID = speciesURL.substring(42, speciesURL.length - 1);
                                 const evolutionDetails = evo.evolution_details
                                 const evolvesTo = evo.evolves_to;
-                                for(let i = 0; i < evolvesTo.length; i++) {
-                                    chain.push({"data": evolvesTo[i], "stage": stage+1});
+                                for (let i = 0; i < evolvesTo.length; i++) {
+                                    chain.push({ "data": evolvesTo[i], "stage": stage + 1 });
                                 }
-                                const evoDesc = poke.parseEvolutionType(evolutionDetails[evolutionDetails.length-1], speciesID);
-                                stages.push({"stage":stage,"speciesID":speciesID,"evoDesc":evoDesc});
+                                const evoDesc = poke.parseEvolutionType(evolutionDetails[evolutionDetails.length - 1], speciesID);
+                                stages.push({ "stage": stage, "speciesID": speciesID, "evoDesc": evoDesc });
                             }
-                            for(let i = 0; i < stages.length; i++) {
+                            for (let i = 0; i < stages.length; i++) {
                                 const stage = stages[i].stage;
                                 const speciesID = stages[i].speciesID;
                                 const evoDesc = stages[i].evoDesc;
@@ -366,11 +366,11 @@ poke.PokemonPageController = class {
                                 evolutionList.appendChild(rowDiv);
                             }
                         });
-                    if(Object.keys(data.egg_groups).length==1) {
+                    if (Object.keys(data.egg_groups).length == 1) {
                         const eggGroup1 = data.egg_groups[0].name;
                         document.querySelector("#eggGroup1").innerHTML = eggGroup1;
                         document.querySelector("#eggGroup2").style.display = "none";
-                    } else if(Object.keys(data.egg_groups).length==2) {
+                    } else if (Object.keys(data.egg_groups).length == 2) {
                         const eggGroup1 = data.egg_groups[0].name;
                         const eggGroup2 = data.egg_groups[1].name;
                         document.querySelector("#eggGroup1").innerHTML = eggGroup1;
@@ -381,7 +381,7 @@ poke.PokemonPageController = class {
                     document.querySelector("#eggSteps").innerHTML = `${hatchCounter*256} Steps`;
                     let genus;
                     data.genera.forEach(genera => {
-                        if(genera.language.name=="en") {
+                        if (genera.language.name == "en") {
                             genus = genera.genus;
                         }
                     });
@@ -392,20 +392,20 @@ poke.PokemonPageController = class {
                 .then(encounters => {
                     const encounterList = document.querySelector("#encounterList");
                     encounterList.innerHTML = "";
-                    for(let i = 0; i < encounters.length; i++) {
-                        const encounterLocation = encounters[i].location_area.name.replaceAll("-"," ").replace("area","");
+                    for (let i = 0; i < encounters.length; i++) {
+                        const encounterLocation = encounters[i].location_area.name.replaceAll("-", " ").replace("area", "");
                         const versionDetails = encounters[i].version_details;
-                        for(let j = 0; j < versionDetails.length; j++) {
+                        for (let j = 0; j < versionDetails.length; j++) {
                             const version = versionDetails[j].version.name;
-                            if(versionIn && version != versionIn) {
+                            if (versionIn && version != versionIn) {
                                 continue;
                             }
                             const encounterDetails = versionDetails[j].encounter_details;
-                            for(let l = 0; l < encounterDetails.length; l++) {
+                            for (let l = 0; l < encounterDetails.length; l++) {
                                 const method = encounterDetails[l].method.name;
                                 let methodText = "";
                                 let imgSrc = "./images/encounters/pokeball.png";
-                                switch(method) {
+                                switch (method) {
                                     case "walk":
                                         methodText = "Walking";
                                         imgSrc = "./images/encounters/pokeball.png";
@@ -499,7 +499,7 @@ poke.PokemonPageController = class {
             pokemonDetailsPage.classList.add("pokedex-view");
         }
 
-        
+
     }
     updatePage() {
 
@@ -637,10 +637,10 @@ poke.Trade = class {
 }
 
 poke.gameToVersionGroup = function(game) {
-    if(!game) {
+    if (!game) {
         return null;
     }
-    switch(game) {
+    switch (game) {
         case "red":
         case "blue":
             return "red-blue";
@@ -687,14 +687,14 @@ poke.gameToVersionGroup = function(game) {
 }
 
 poke.parseEvolutionType = function(evolution, speciesID) {
-    if(evolution) {
+    if (evolution) {
         let evoDesc = "";
         const gender = (evolution.gender ? (evolution.gender == 1 ? "female" : "male") : null);
-        const heldItem = (evolution.held_item ? evolution.held_item.name.replaceAll("-"," ") : null);
-        const item = (evolution.item ? evolution.item.name.replaceAll("-"," ") : null);
-        const knownMove = (evolution.known_move ? evolution.known_move.name.replaceAll("-"," ") : null);
-        const knownMoveType = (evolution.known_move_type ? evolution.known_move_type.name.replaceAll("-"," ") : null);
-        const location = (evolution.location ? evolution.location.name.replaceAll("-"," ") : null);
+        const heldItem = (evolution.held_item ? evolution.held_item.name.replaceAll("-", " ") : null);
+        const item = (evolution.item ? evolution.item.name.replaceAll("-", " ") : null);
+        const knownMove = (evolution.known_move ? evolution.known_move.name.replaceAll("-", " ") : null);
+        const knownMoveType = (evolution.known_move_type ? evolution.known_move_type.name.replaceAll("-", " ") : null);
+        const location = (evolution.location ? evolution.location.name.replaceAll("-", " ") : null);
         const minAffection = (evolution.min_affection ? "Affection" : null);
         const minBeauty = (evolution.min_beauty ? "High beauty" : null);
         const happiness = evolution.min_happiness;
@@ -702,66 +702,66 @@ poke.parseEvolutionType = function(evolution, speciesID) {
         const rain = evolution.needs_overworld_rain;
         const partySpecies = (evolution.party_species ? evolution.party_species.name : null);
         const partyType = (evolution.party_type ? evolution.party_type.name : null);
-        const relativePhysicalStats = (evolution.relative_physical_stats!=null ? (evolution.relative_physical_stats == 0 ? "same stats" : (evolution.relative_physical_stats == 1 ? "higher attack" : "higher defense")) : null);
+        const relativePhysicalStats = (evolution.relative_physical_stats != null ? (evolution.relative_physical_stats == 0 ? "same stats" : (evolution.relative_physical_stats == 1 ? "higher attack" : "higher defense")) : null);
         const time = evolution.time_of_day;
         const tradeSpecies = (evolution.trade_species ? evolution.trade_species.name : null);
-        switch(evolution.trigger.name) {
+        switch (evolution.trigger.name) {
             case "level-up":
-                if(gender) {
+                if (gender) {
                     evoDesc += gender + " ";
                 }
                 evoDesc += "level";
-                if(level) {
+                if (level) {
                     evoDesc += " " + level;
                 }
-                if(knownMove) {
+                if (knownMove) {
                     evoDesc += " knowing " + knownMove;
                 }
-                if(minBeauty) {
+                if (minBeauty) {
                     evoDesc += " high beauty";
                 }
-                if(minAffection) {
+                if (minAffection) {
                     evoDesc += " high affection";
                 }
-                if(knownMoveType) {
+                if (knownMoveType) {
                     evoDesc += " knowing move of type " + knownMoveType;
                 }
-                if(relativePhysicalStats) {
+                if (relativePhysicalStats) {
                     evoDesc += relativePhysicalStats;
                 }
-                if(happiness) {
+                if (happiness) {
                     evoDesc += " high happiness";
                 }
-                if(location) {
+                if (location) {
                     evoDesc += " at " + location;
                 }
-                if(rain) {
+                if (rain) {
                     evoDesc += " in rain";
                 }
-                if(partySpecies) {
+                if (partySpecies) {
                     evoDesc += " with a " + partySpecies;
                 }
-                if(partyType) {
+                if (partyType) {
                     evoDesc += " with a " + partyType + " type";
                 }
-                if(time) {
+                if (time) {
                     evoDesc += " at " + time;
                 }
-                if(heldItem) {
+                if (heldItem) {
                     evoDesc += " holding " + heldItem;
                 }
                 return evoDesc;
             case "trade":
                 evoDesc = "trade";
-                if(heldItem) {
+                if (heldItem) {
                     evoDesc += " with " + heldItem;
                 }
-                if(tradeSpecies) {
+                if (tradeSpecies) {
                     evoDesc += " with a " + tradeSpecies;
                 }
                 return evoDesc;
             case "use-item":
-                if(item) {
+                if (item) {
                     return "use " + item;
                 } else {
                     return "use something";
@@ -769,7 +769,7 @@ poke.parseEvolutionType = function(evolution, speciesID) {
             case "shed":
                 return "evolve with an open space"
             case "other":
-                switch(speciesID) {
+                switch (speciesID) {
                     case "865":
                         return "get 3 crits";
                     case "867":
@@ -812,19 +812,24 @@ poke.main = function() {
             var isAnonymous = user.isAnonymous;
             var phoneNumber = user.phoneNumber;
             var uid = user.uid;
-            console.log("Signed in", uid);
-            console.log('displayName :>> ', displayName);
-            console.log('email :>> ', email);
-            console.log('photoURL :>> ', photoURL);
-            console.log('isAnonymous :>> ', isAnonymous);
-            console.log('phoneNumber :>> ', phoneNumber);
-            console.log('uid :>> ', uid);
+            // console.log("Signed in", uid);
+            // console.log('displayName :>> ', displayName);
+            // console.log('email :>> ', email);
+            // console.log('photoURL :>> ', photoURL);
+            // console.log('isAnonymous :>> ', isAnonymous);
+            // console.log('phoneNumber :>> ', phoneNumber);
+            // console.log('uid :>> ', uid);
+            console.log("The user signed in ", uid);
             // ...
         } else {
             // User is signed out
             // ...
+            console.log("There is no user signed in");
         }
     });
+
+    const inputEmailEl = document.querySelector("#inputEmail");
+    const inputPasswordEl = document.querySelector("#inputPassword");
 
     document.querySelector("#createAccountButton").onclick = (event) => {
         console.log(`Create account for email: ${inputEmailEl.value}  password: ${inputPasswordEl.value}`);
@@ -864,20 +869,20 @@ poke.main = function() {
         });
     };
 
-    poke.startFirebaseAuthUi();
+    // poke.startFirebaseAuthUi();
 };
 
-poke.startFirebaseAuthUi = () => {
-    // Initialize the FirebaseUI Widget using Firebase.
-    var ui = new firebaseui.auth.AuthUI(firebase.auth());
-    ui.start('#firebaseui-auth-container', {
-        signInSuccessUrl: '/',
-        signInOptions: [
-            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-            firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        ],
-        // Other config options...
-    });
-}
+// poke.startFirebaseAuthUi = () => {
+//     // Initialize the FirebaseUI Widget using Firebase.
+//     var ui = new firebaseui.auth.AuthUI(firebase.auth());
+//     ui.start('#firebaseui-auth-container', {
+//         signInSuccessUrl: '/',
+//         signInOptions: [
+//             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+//             firebase.auth.EmailAuthProvider.PROVIDER_ID,
+//         ],
+//         // Other config options...
+//     });
+// }
 
 poke.main();
