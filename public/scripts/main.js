@@ -189,6 +189,24 @@ poke.PokemonPageController = class {
             pokedexList.appendChild(pokeIcon);
         }
 
+        const gameIcons = document.querySelectorAll(".game-icon");
+        for(let i = 0; i < gameIcons.length; i++) {
+            const gameIcon = gameIcons[i];
+            const gameName = gameIcon.dataset.version;
+            gameIcon.onclick = (event) => {
+                if(versionIn) {
+                    if(versionIn==gameName) {
+                        window.location.href = `/pokemon.html?pid=${pid}`;
+                    } else {
+                        window.location.href = `/pokemon.html?pid=${pid}&game=${gameName}`
+                    }
+                } else {
+                    window.location.href = `/pokemon.html?pid=${pid}&game=${gameName}`
+                }
+                
+            }
+        }
+
         if(pid) {
             pokemonDetailsPage.classList.add("pokemon-view");
             fetch(`https://pokeapi.co/api/v2/pokemon/${pid}`)
