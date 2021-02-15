@@ -40,7 +40,7 @@ body {
     padding: 10px;
 }
 
-.bmd-layout-content>#loginPage h1 {
+.bmd-layout-content hr h1 {
     /* round boi */
     border-radius: 25px;
     background: #003A70;

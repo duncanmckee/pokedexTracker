@@ -806,20 +806,20 @@ poke.main = function() {
         if (user) {
             // User is signed in, see docs for a list of available properties
             // https://firebase.google.com/docs/reference/js/firebase.User
-            var displayName = user.displayName;
-            var email = user.email;
-            var photoURL = user.photoURL;
-            var isAnonymous = user.isAnonymous;
-            var phoneNumber = user.phoneNumber;
-            var uid = user.uid;
-            // console.log("Signed in", uid);
-            // console.log('displayName :>> ', displayName);
-            // console.log('email :>> ', email);
-            // console.log('photoURL :>> ', photoURL);
-            // console.log('isAnonymous :>> ', isAnonymous);
-            // console.log('phoneNumber :>> ', phoneNumber);
-            // console.log('uid :>> ', uid);
+            const displayName = user.displayName;
+            const email = user.email;
+            const photoURL = user.photoURL;
+            const isAnonymous = user.isAnonymous;
+            const phoneNumber = user.phoneNumber;
+            const uid = user.uid;
             console.log("The user signed in ", uid);
+            console.log('displayName :>> ', displayName);
+            console.log('email :>> ', email);
+            console.log('photoURL :>> ', photoURL);
+            console.log('isAnonymous :>> ', isAnonymous);
+            console.log('phoneNumber :>> ', phoneNumber);
+            console.log('uid :>> ', uid);
+
             // ...
         } else {
             // User is signed out
@@ -849,16 +849,16 @@ poke.main = function() {
         });
     };
 
-    // document.querySelector("#anonymousAuthButton").onclick = (event) => {
-    //     console.log(`Log in via Anonymous auth`);
+    document.querySelector("#anonymousAuthButton").onclick = (event) => {
+        console.log(`Log in via Anonymous auth/ Guest Mode`);
 
-    //     firebase.auth().signInAnonymously().catch(function(error) {
-    //         // Handle Errors here.
-    //         var errorCode = error.code;
-    //         var errorMessage = error.message;
-    //         console.log("Log in existing user error", errorCode, errorMessage);
-    //     });
-    // };
+        firebase.auth().signInAnonymously().catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log("Anonymous auth error", errorCode, errorMessage);
+        });
+    };
 
     document.querySelector("#signOutButton").onclick = (event) => {
         console.log("Sign Out called");
@@ -869,20 +869,33 @@ poke.main = function() {
         });
     };
 
-    // poke.startFirebaseAuthUi();
+    poke.startFirebaseAuthUi();
 };
 
-// poke.startFirebaseAuthUi = () => {
-//     // Initialize the FirebaseUI Widget using Firebase.
-//     var ui = new firebaseui.auth.AuthUI(firebase.auth());
-//     ui.start('#firebaseui-auth-container', {
-//         signInSuccessUrl: '/',
-//         signInOptions: [
-//             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-//             firebase.auth.EmailAuthProvider.PROVIDER_ID,
-//         ],
-//         // Other config options...
-//     });
-// }
+poke.startFirebaseAuthUi = function() {
+    var uiConfig = {
+        signInSuccessUrl: '<url-to-redirect-to-on-success>',
+        signInOptions: [
+            // Leave the lines as is for the providers you want to offer your users.
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+        ],
+        // tosUrl and privacyPolicyUrl accept either url string or a callback
+        // function.
+        // Terms of service url/callback.
+        tosUrl: '<your-tos-url>',
+        // Privacy policy url/callback.
+        privacyPolicyUrl: function() {
+            window.location.assign('<your-privacy-policy-url>');
+        }
+    };
+
+    // Initialize the FirebaseUI Widget using Firebase.
+    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    // The start method will wait until the DOM is loaded.
+    ui.start('#firebaseui-auth-container', uiConfig);
+
+}
 
 poke.main();
