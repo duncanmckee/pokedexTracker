@@ -155,7 +155,12 @@
 
 .evo-icon {
     text-align: center;
-    max-width: 33.3%
+    max-width: 33.3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
 }
 
 .evo-icon > h3 {
@@ -167,7 +172,7 @@
 }
 
 .evo-icon > img {
-    width: 80%;
+    height: 70%;
 }
 
 h2 {
@@ -273,7 +278,7 @@ h2 {
     #pokemonDetailsPage.pokemon-view {
         display: grid;
         grid-template-columns: 5vw 90vw 5vw;
-        grid-template-rows: 10% 90% 30% 40% 40%;
+        grid-template-rows: 10vh 100vh 30vh 40vh 40vh;
     }
 
     .pokedex-view #pokedexList {

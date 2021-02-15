@@ -558,11 +558,11 @@ poke.FbProfileManager = class {
     }
 }
 poke.FbPokemonManager = class {
-    constructor(pid) {
+    constructor(pid, uid="example") {
         this._pid = pid;
         this._pokedex = {};
         this._unsubscribe = null;
-        this._pokedexRef = firebase.firestore().collection(poke.FB_COLLECTION_USER).doc("example");
+        this._pokedexRef = firebase.firestore().collection(poke.FB_COLLECTION_USER).doc(uid);
     }
     addOwned(pid) {
         this._pokedexRef.collection(poke.FB_USER_KEY_POKEMON).add({[pid]: true});
@@ -794,8 +794,6 @@ poke.initializePage = function() {
 poke.main = function() {
     poke.fbAuthManager = new poke.FbAuthManager();
     poke.initializePage();
-
-    console.log("Ready");
 
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
