@@ -357,6 +357,13 @@ poke.PokemonPageController = class {
                                 const speciesID = stages[i].speciesID;
                                 const evoDesc = stages[i].evoDesc;
                                 const rowDiv = document.createElement("div");
+                                rowDiv.onclick = (event) => {
+                                    if (versionIn) {
+                                        window.location.href = `/pokemon.html?pid=${speciesID}&game=${versionIn}`;
+                                    } else {
+                                        window.location.href = `/pokemon.html?pid=${speciesID}`;
+                                    }
+                                };
                                 rowDiv.classList.add("evo-icon");
                                 rowDiv.style = `width: ${100/stages.length}%`;
                                 rowDiv.innerHTML = `<h3>Stage ${stage}</h3>
