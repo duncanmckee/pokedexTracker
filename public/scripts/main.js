@@ -12,12 +12,12 @@ poke.FB_COLLECTION_TRADE = "TradeRequest";
 poke.FB_TRADE_KEY_AUTHOR = "author";
 poke.FB_TRADE_KEY_POKEMON = "pokemonId";
 poke.FB_TRADE_KEY_DESCRIPTION = "requestText";
+poke.FB_TRADE_KEY_TIMESTAMP = "lastEdit";
 
 poke.fbAuthManager = null;
 poke.fbProfileManager = null;
 poke.fbPokemonManager = null;
-poke.fbTradesListManager = null;
-poke.fbTradeDetailManager = null;
+poke.fbTradesManager = null;
 
 
 poke.MoveData = class {
@@ -128,13 +128,13 @@ poke.SideNavController = class {
         const menuShowAllItem = document.querySelector("#menuShowAll");
         if (menuShowAllItem) {
             menuShowAllItem.addEventListener("click", (event) => {
-                window.location.href = "/dex.html";
+                window.location.href = "/pokemon.html";
             });
         }
-        const menuShowMyItem = document.querySelector("#menuShowMy");
-        if (menuShowMyItem) {
-            menuShowMyItem.addEventListener("click", (event) => {
-                window.location.href = `/dex.html?uid=${rhit.fbAuthManager.uid}`;
+        const menuShowTrades = document.querySelector("#menuShowTrades");
+        if (menuShowTrades) {
+            menuShowTrades.addEventListener("click", (event) => {
+                window.location.href = "/trades.html";
             });
         }
         const menuSignOutItem = document.querySelector("#menuSignOut");
@@ -160,6 +160,7 @@ poke.ProfilePageController = class {
 }
 poke.PokemonPageController = class {
     constructor(pid = null, versionGroupIn = null, versionIn = null) {
+        this._pid = pid;
         const pokemonDetailsPage = document.querySelector("#pokemonDetailsPage");
         const pokedexList = document.querySelector("#pokedexList");
         pokedexList.innerHTML = "";
@@ -179,7 +180,14 @@ poke.PokemonPageController = class {
             };
             pokedexList.appendChild(pokeIcon);
         }
-
+        document.querySelector("#addPokeButton").onclick = (event) => {
+            poke.fbPokemonManager.addOwned(pid);
+        };
+        document.querySelector("#removePokeButton").onclick = (event) => {
+            poke.fbPokemonManager.removeOwned(pid);
+        };
+        document.querySelector("#addPokeButton").style.display = "none";
+        document.querySelector("#removePokeButton").style.display = "none";
         const gameIcons = document.querySelectorAll(".game-icon");
         for (let i = 0; i < gameIcons.length; i++) {
             const gameIcon = gameIcons[i];
@@ -501,22 +509,82 @@ poke.PokemonPageController = class {
                 pokeIcon.classList.add("not-owned-poke");
             }
         }
+        if(poke.fbPokemonManager.ownsPokemon(this._pid)) {
+            document.querySelector("#addPokeButton").style.display = "none";
+            document.querySelector("#removePokeButton").style.display = "block";
+        } else {
+            document.querySelector("#addPokeButton").style.display = "block";
+            document.querySelector("#removePokeButton").style.display = "none";
+        }
     }
 }
-poke.TradesListPageController = class {
-    constructor() {
-
+poke.TradesPageController = class {
+    constructor(tradeDisplayed) {
+        this._tradesListElement = document.querySelector("#tradesList");
+        this._tradeDisplayIcon = document.querySelector("#tradeDisplayIcon");
+        this._tradeDisplayUser = document.querySelector("#tradeDisplayUser");
+        this._tradeDisplayMessage = document.querySelector("#tradeDisplayMessage");
+        this._tradeDisplayOptions = document.querySelector("#tradeDisplayOptions");
+        poke.fbTradesManager.beginListening(this.updatePage.bind(this));
+        if(tradeDisplayed!=undefined)
+            this._tradeDisplayed = tradeDisplayed;
+        else
+            this._tradeDisplayed = 0;
+        $("#addTradeModal").on("show.bs.modal", (event) => {
+            document.querySelector("#inputPokemonAdd").value = "";
+            document.querySelector("#inputDescriptionAdd").value = "";
+        });
+        $("#addTradeModal").on("shown.bs.modal", (event) => {
+            document.querySelector("#inputPokemonAdd").focus();
+        });
+        document.querySelector("#submitAddTrade").onclick = (event) => {
+            const pokemon = document.querySelector("#inputPokemonAdd").value;
+            const description = document.querySelector("#inputDescriptionAdd").value;
+            poke.fbTradesManager.createTrade(pokemon, description);
+        };
+        $("#editTradeModal").on("show.bs.modal", (event) => {
+            const trade = poke.fbTradesManager.getTradeAtIndex(this._tradeDisplayed);
+			document.querySelector("#inputDescriptionEdit").value = trade.description;
+		});
+		$("#editTradeModal").on("shown.bs.modal", (event) => {
+			document.querySelector("#inputDescriptionEdit").focus();
+		});
+        document.querySelector("#submitEditTrade").addEventListener("click", (event) => {
+			const description = document.querySelector("#inputDescriptionEdit").value;
+            poke.fbTradesManager.updateTrade(this._tradeDisplayed, description);
+		});
+		document.querySelector("#submitDeleteTrade").addEventListener("click", (event) => {
+            poke.fbTradesManager.deleteTrade(this._tradeDisplayed);
+		});
     }
     updatePage() {
-
-    }
-}
-poke.TradeDetailPageController = class {
-    constructor() {
-
-    }
-    updatePage() {
-
+        this._tradesListElement.innerHTML = "";
+        for(let i = 0; i < poke.fbTradesManager.length; i++) {
+            const index = i;
+            const trade = poke.fbTradesManager.getTradeAtIndex(index);
+            const newTrade = document.createElement("div");
+            newTrade.onclick = (event) => {
+                window.location.href = `/trades.html?trade=${index}`;
+            }
+            newTrade.classList.add("trade-item");
+            newTrade.innerHTML = `<div class="trade-icon-holder">
+            <img class="trade-icon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${trade.pokemon}.png">
+            </div>
+            <h1 class="trade-user">${trade.uid}</h1>
+            <div class="trade-message">${trade.description}</div>`;
+            this._tradesListElement.appendChild(newTrade);
+        }
+        if(poke.fbTradesManager.length > this._tradeDisplayed) {
+            const trade = poke.fbTradesManager.getTradeAtIndex(this._tradeDisplayed);
+            this._tradeDisplayIcon.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${trade.pokemon}.png`;
+            this._tradeDisplayUser.innerHTML = trade.uid;
+            this._tradeDisplayMessage.innerHTML = trade.description;
+            if("example"==trade.uid) { // FIX ME
+                this._tradeDisplayOptions.style.display = "block";
+            } else {
+                this._tradeDisplayOptions.style.display = "none";
+            }
+        }
     }
 }
 
@@ -536,7 +604,7 @@ poke.FbAuthManager = class {
 }
 poke.FbProfileManager = class {
     constructor() {
-
+        
     }
     tryCreateNewUser(uid, name) {
 
@@ -558,20 +626,23 @@ poke.FbProfileManager = class {
     }
 }
 poke.FbPokemonManager = class {
-    constructor(pid, uid="example") {
+    constructor(pid) {
         this._pid = pid;
         this._pokedex = {};
         this._unsubscribe = null;
-        this._pokedexRef = firebase.firestore().collection(poke.FB_COLLECTION_USER).doc(uid);
+        this._pokedexRef = firebase.firestore().collection(poke.FB_COLLECTION_USER).doc("example"); // FIX ME
     }
     addOwned(pid) {
-        this._pokedexRef.collection(poke.FB_USER_KEY_POKEMON).add({[pid]: true});
+        this._pokedex[pid] = true;
+        this._pokedexRef.update({
+            [poke.FB_USER_KEY_POKEMON]: this._pokedex
+        });
     }
     beginListening(changeListener) {
         this._unsubscribe = this._pokedexRef.onSnapshot((doc) => {
             if(doc.exists) {
                 this._pokedex = doc.get(poke.FB_USER_KEY_POKEMON);
-                changeListener();
+                if(changeListener) changeListener();
             }
         })
     }
@@ -579,55 +650,69 @@ poke.FbPokemonManager = class {
         if(this._unsubscribe) this._unsubscribe();
     }
     removeOwned(pid) {
-        this._pokedexRef.collection(poke.FB_USER_KEY_POKEMON).add({[pid]: false});
+        this._pokedex[pid] = false;
+        this._pokedexRef.update({
+            [poke.FB_USER_KEY_POKEMON]: this._pokedex
+        });
     }
     ownsPokemon(pid) {
         return !!this._pokedex[pid];
     }
 }
-poke.FbTradesListManager = class {
-    constructor(uid) {
-
+poke.FbTradesManager = class {
+    constructor() {
+        this._tradesList = [];
+        this._unsubscribe = null;
+        this._tradesRef = firebase.firestore().collection(poke.FB_COLLECTION_TRADE);
     }
     createTrade(pokemon, description) {
-
+        this._tradesRef.add({
+            [poke.FB_TRADE_KEY_AUTHOR]: "example", // FIX ME
+            [poke.FB_TRADE_KEY_POKEMON]: pokemon,
+            [poke.FB_TRADE_KEY_DESCRIPTION]: description,
+            [poke.FB_TRADE_KEY_TIMESTAMP]: firebase.firestore.Timestamp.now()
+        });
     }
     beginListening(changeListener) {
-
+        this._unsubscribe = this._tradesRef.orderBy(poke.FB_TRADE_KEY_TIMESTAMP,"desc").limit(50).onSnapshot((snapshot) =>{
+            this._tradesList = snapshot.docs;
+            if(changeListener) changeListener();
+        });
     }
     stopListening() {
-
+        if(this._unsubscribe) this._unsubscribe();
+    }
+    get length() {
+        return this._tradesList.length;
     }
     getTradeAtIndex(index) {
-
+        const trade = this._tradesList[index];
+        return new poke.Trade(
+            trade.id,
+            trade.get(poke.FB_TRADE_KEY_AUTHOR),
+            trade.get(poke.FB_TRADE_KEY_POKEMON),
+            trade.get(poke.FB_TRADE_KEY_DESCRIPTION)
+        );
+    }
+    updateTrade(index, description) {
+        const trade = this.getTradeAtIndex(index);
+        this._tradesRef.doc(trade.id).update({
+            [poke.FB_TRADE_KEY_DESCRIPTION]: description,
+            [poke.FB_TRADE_KEY_TIMESTAMP]: firebase.firestore.Timestamp.now()
+        });
+    }
+    deleteTrade(index) {
+        const trade = this.getTradeAtIndex(index);
+        this._tradesRef.doc(trade.id).delete();
     }
 }
-poke.FbTradeDetailManager = class {
-    constructor() {
 
-    }
-    beginListening(changeListener) {
-
-    }
-    stopListening() {
-
-    }
-    updateTrade(description) {
-
-    }
-    deleteTrade() {
-
-    }
-}
-
-poke.Pokemon = class {
-    constructor(id, name, owned) {
-
-    }
-}
 poke.Trade = class {
     constructor(id, uid, pokemon, description) {
-
+        this.id = id;
+        this.uid = uid; // FIX ME
+        this.pokemon = pokemon;
+        this.description = description;
     }
 }
 
@@ -786,8 +871,13 @@ poke.initializePage = function() {
     if (document.querySelector("#pokemonDetailsPage")) {
         const pid = urlParams.get("pid");
         const game = urlParams.get("game");
-        poke.fbPokemonManager = new this.FbPokemonManager(pid);
+        poke.fbPokemonManager = new poke.FbPokemonManager(pid);
         new poke.PokemonPageController(pid, poke.gameToVersionGroup(game), game);
+    }
+    if(document.querySelector("#tradesPage")) {
+        const tradeID = urlParams.get("trade");
+        poke.fbTradesManager = new poke.FbTradesManager();
+        new poke.TradesPageController(tradeID);
     }
 }
 
