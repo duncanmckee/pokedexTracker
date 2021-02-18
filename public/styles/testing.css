@@ -10,12 +10,12 @@
 
 .vert-scroll-hidden {
     overflow-y: scroll;
-    scrollbar-width: none;
+    scrollbar-width: thin;
 }
 
-.vert-scroll-hidden::-webkit-scrollbar {
+/* .vert-scroll-hidden::-webkit-scrollbar {
     display: none;
-}
+} */
 
 .dex-icon > img {
     width: 100%;
@@ -138,6 +138,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    scrollbar-width: thin;
 }
 
 .game-icon {
@@ -340,7 +341,7 @@ h2 {
 @media(min-width:992px) {
     #pokemonDetailsPage.pokemon-view {
         display: grid;
-        grid-template-columns: 15vw 40vw 30vw 15vw;
+        grid-template-columns: 15% 40% 30% 15%;
         grid-template-rows: 10% 35% 55%;
     }
 
@@ -349,15 +350,15 @@ h2 {
     }
 
     .pokedex-view #pokedexList {
-        grid-template-columns: repeat(10, 10vw);
-        grid-auto-rows: 10vw;
+        grid-template-columns: repeat(10, 10%);
+        grid-auto-rows: min-content;
     }
 
     .pokemon-view #pokedexList {
         grid-column: 1;
         grid-row: 1 / 4;
-        grid-template-columns: repeat(3, 5vw);
-        grid-auto-rows: 5vw;
+        grid-template-columns: repeat(3, 33.3%);
+        grid-auto-rows: min-content;
     }
 
     .pokedex-view #detailContainer {

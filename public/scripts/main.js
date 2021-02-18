@@ -170,6 +170,7 @@ poke.PokemonPageController = class {
             pokeIcon.classList.add("dex-icon");
             pokeIcon.innerHTML = `<img id="pkmn${id}" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idstay}.png">`;
             pokeIcon.onclick = (event) => {
+                console.log(pokedexList.scrollTop);
                 if (pid == idstay) {
                     window.location.href = "/pokemon.html";
                 } else if (versionIn) {
@@ -180,6 +181,7 @@ poke.PokemonPageController = class {
             };
             pokedexList.appendChild(pokeIcon);
         }
+        
         document.querySelector("#addPokeButton").onclick = (event) => {
             poke.fbPokemonManager.addOwned(pid);
         };
@@ -506,6 +508,14 @@ poke.PokemonPageController = class {
         }
         
         poke.fbPokemonManager.beginListening(this.updatePage.bind(this));
+
+        if(pid) {
+            const iconHeight = document.querySelector(".dex-icon").offsetHeight;
+            const scrollHeight = iconHeight*(Math.floor(pid/3)-2);
+            pokedexList.scrollTop = scrollHeight;
+            console.log(scrollHeight);
+        }
+        
     }
     updatePage() {
         for(let id = 1; id <= poke.NUM_POKEMON; id++) {
