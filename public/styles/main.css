@@ -34,11 +34,24 @@ body {
 }
 
 .bmd-layout-content h1 {
-    /* round boi */
+    /* big round boi */
     border-radius: 25px;
     background: #003A70;
     padding: 20px;
     width: 750px;
+    height: auto;
+    /* text styling*/
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.bmd-layout-content h3 {
+    /* small round boi */
+    border-radius: 15px;
+    background: #003A70;
+    padding: 10px;
+    width: 250px;
     height: auto;
     /* text styling*/
     color: white;
