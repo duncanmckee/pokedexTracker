@@ -169,28 +169,16 @@ poke.LoginPageController = class {
         const inputPasswordEl = document.querySelector("#inputPassword");
 
         document.querySelector("#createAccountButton").onclick = (event) => {
-            console.log(`Create account for email: ${inputEmailEl.value}  password: ${inputPasswordEl.value}`);
-            firebase.auth().createUserWithEmailAndPassword(inputEmailEl.value, inputPasswordEl.value).catch(function(error) {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                console.log("Create user error", errorCode, errorMessage);
-            });
+            poke.fbAuthManager.createAccount(inputEmailEl.value, inputPasswordEl.value);
         };
 
         document.querySelector("#logInButton").onclick = (event) => {
-            console.log(`Log in to existing account for email: ${inputEmailEl.value}  password: ${inputPasswordEl.value}`);
-            firebase.auth().signInWithEmailAndPassword(inputEmailEl.value, inputPasswordEl.value).catch(function(error) {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                console.log("Log in existing user error", errorCode, errorMessage);
-            });
+            poke.fbAuthManager.signIn(inputEmailEl.value, inputPasswordEl.value);
         };
 
         document.querySelector("#anonymousAuthButton").onclick = (event) => {
             window.location.href = "/pokemon.html";
         };
-
-        // poke.startFirebaseAuthUi();
     }
 }
 poke.ProfilePageController = class {
@@ -676,8 +664,11 @@ poke.FbAuthManager = class {
             changeListener();
         });
     }
-    signIn() {
-
+    signIn(email, pass) {
+        firebase.auth().signInWithEmailAndPassword(email, pass);
+    }
+    createAccount(email, pass) {
+        firebase.auth().createUserWithEmailAndPassword(email, pass);
     }
     signOut() {
         firebase.auth().signOut();
@@ -1079,62 +1070,6 @@ poke.main = function() {
             poke.initializePage();
         })
     });
-
-    // poke.initializePage();
-
-
-
-    // firebase.auth().onAuthStateChanged((user) => {
-    //     if (user) {
-    //         // User is signed in, see docs for a list of available properties
-    //         // https://firebase.google.com/docs/reference/js/firebase.User
-    //         const displayName = user.displayName;
-    //         const email = user.email;
-    //         const photoURL = user.photoURL;
-    //         const isAnonymous = user.isAnonymous;
-    //         const phoneNumber = user.phoneNumber;
-    //         const uid = user.uid;
-    //         console.log("The user signed in ", uid);
-    //         console.log('displayName :>> ', displayName);
-    //         console.log('email :>> ', email);
-    //         console.log('photoURL :>> ', photoURL);
-    //         console.log('isAnonymous :>> ', isAnonymous);
-    //         console.log('phoneNumber :>> ', phoneNumber);
-    //         console.log('uid :>> ', uid);
-
-    //         // ...
-    //     } else {
-    //         // User is signed out
-    //         // ...
-    //         console.log("There is no user signed in");
-    //     }
-    // });
 };
-
-poke.startFirebaseAuthUi = function() {
-    var uiConfig = {
-        signInSuccessUrl: '/profile.html',
-        signInOptions: [
-            // Leave the lines as is for the providers you want to offer your users.
-            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-            firebase.auth.EmailAuthProvider.PROVIDER_ID,
-            firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
-        ],
-        // tosUrl and privacyPolicyUrl accept either url string or a callback
-        // function.
-        // Terms of service url/callback.
-        tosUrl: '/',
-        // Privacy policy url/callback.
-        privacyPolicyUrl: function() {
-            window.location.assign('/');
-        }
-    };
-
-    // Initialize the FirebaseUI Widget using Firebase.
-    var ui = new firebaseui.auth.AuthUI(firebase.auth());
-    // The start method will wait until the DOM is loaded.
-    ui.start('#firebaseui-auth-container', uiConfig);
-
-}
 
 poke.main();
