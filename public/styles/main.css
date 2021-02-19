@@ -23,6 +23,7 @@ body {
 }
 
 .bmd-layout-content {
+    padding: 65px;
     height: 100vh;
     width: 100vw;
 }
@@ -40,7 +41,7 @@ body {
     padding: 10px;
 }
 
-.bmd-layout-content hr h1 {
+.bmd-layout-content h1 {
     /* round boi */
     border-radius: 25px;
     background: #003A70;

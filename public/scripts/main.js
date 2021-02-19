@@ -181,7 +181,7 @@ poke.PokemonPageController = class {
             };
             pokedexList.appendChild(pokeIcon);
         }
-        
+
         document.querySelector("#addPokeButton").onclick = (event) => {
             poke.fbPokemonManager.addOwned(pid);
         };
@@ -506,25 +506,25 @@ poke.PokemonPageController = class {
         } else {
             pokemonDetailsPage.classList.add("pokedex-view");
         }
-        
+
         poke.fbPokemonManager.beginListening(this.updatePage.bind(this));
 
-        if(pid) {
+        if (pid) {
             const iconHeight = document.querySelector(".dex-icon").offsetHeight;
-            const scrollHeight = iconHeight*(Math.floor(pid/3)-2);
+            const scrollHeight = iconHeight * (Math.floor(pid / 3) - 2);
             pokedexList.scrollTop = scrollHeight;
         }
     }
     updatePage() {
-        for(let id = 1; id <= poke.NUM_POKEMON; id++) {
+        for (let id = 1; id <= poke.NUM_POKEMON; id++) {
             const pokeIcon = document.querySelector(`#pkmn${id}`);
-            if(poke.fbPokemonManager.ownsPokemon(id)) {
+            if (poke.fbPokemonManager.ownsPokemon(id)) {
                 pokeIcon.classList.remove("not-owned-poke");
             } else {
                 pokeIcon.classList.add("not-owned-poke");
             }
         }
-        if(poke.fbPokemonManager.ownsPokemon(this._pid)) {
+        if (poke.fbPokemonManager.ownsPokemon(this._pid)) {
             document.querySelector("#addPokeButton").style.display = "none";
             document.querySelector("#removePokeButton").style.display = "block";
         } else {
@@ -541,7 +541,7 @@ poke.TradesPageController = class {
         this._tradeDisplayMessage = document.querySelector("#tradeDisplayMessage");
         this._tradeDisplayOptions = document.querySelector("#tradeDisplayOptions");
         poke.fbTradesManager.beginListening(this.updatePage.bind(this));
-        if(tradeDisplayed!=undefined)
+        if (tradeDisplayed != undefined)
             this._tradeDisplayed = tradeDisplayed;
         else
             this._tradeDisplayed = 0;
@@ -559,22 +559,22 @@ poke.TradesPageController = class {
         };
         $("#editTradeModal").on("show.bs.modal", (event) => {
             const trade = poke.fbTradesManager.getTradeAtIndex(this._tradeDisplayed);
-			document.querySelector("#inputDescriptionEdit").value = trade.description;
-		});
-		$("#editTradeModal").on("shown.bs.modal", (event) => {
-			document.querySelector("#inputDescriptionEdit").focus();
-		});
+            document.querySelector("#inputDescriptionEdit").value = trade.description;
+        });
+        $("#editTradeModal").on("shown.bs.modal", (event) => {
+            document.querySelector("#inputDescriptionEdit").focus();
+        });
         document.querySelector("#submitEditTrade").addEventListener("click", (event) => {
-			const description = document.querySelector("#inputDescriptionEdit").value;
+            const description = document.querySelector("#inputDescriptionEdit").value;
             poke.fbTradesManager.updateTrade(this._tradeDisplayed, description);
-		});
-		document.querySelector("#submitDeleteTrade").addEventListener("click", (event) => {
+        });
+        document.querySelector("#submitDeleteTrade").addEventListener("click", (event) => {
             poke.fbTradesManager.deleteTrade(this._tradeDisplayed);
-		});
+        });
     }
     updatePage() {
         this._tradesListElement.innerHTML = "";
-        for(let i = 0; i < poke.fbTradesManager.length; i++) {
+        for (let i = 0; i < poke.fbTradesManager.length; i++) {
             const index = i;
             const trade = poke.fbTradesManager.getTradeAtIndex(index);
             const newTrade = document.createElement("div");
@@ -589,12 +589,12 @@ poke.TradesPageController = class {
             <div class="trade-message">${trade.description}</div>`;
             this._tradesListElement.appendChild(newTrade);
         }
-        if(poke.fbTradesManager.length > this._tradeDisplayed) {
+        if (poke.fbTradesManager.length > this._tradeDisplayed) {
             const trade = poke.fbTradesManager.getTradeAtIndex(this._tradeDisplayed);
             this._tradeDisplayIcon.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${trade.pokemon}.png`;
             this._tradeDisplayUser.innerHTML = trade.uid;
             this._tradeDisplayMessage.innerHTML = trade.description;
-            if("example"==trade.uid) { // FIX ME
+            if ("example" == trade.uid) { // FIX ME
                 this._tradeDisplayOptions.style.display = "block";
             } else {
                 this._tradeDisplayOptions.style.display = "none";
@@ -619,7 +619,7 @@ poke.FbAuthManager = class {
 }
 poke.FbProfileManager = class {
     constructor() {
-        
+
     }
     tryCreateNewUser(uid, name) {
 
@@ -655,14 +655,14 @@ poke.FbPokemonManager = class {
     }
     beginListening(changeListener) {
         this._unsubscribe = this._pokedexRef.onSnapshot((doc) => {
-            if(doc.exists) {
+            if (doc.exists) {
                 this._pokedex = doc.get(poke.FB_USER_KEY_POKEMON);
-                if(changeListener) changeListener();
+                if (changeListener) changeListener();
             }
         })
     }
     stopListening() {
-        if(this._unsubscribe) this._unsubscribe();
+        if (this._unsubscribe) this._unsubscribe();
     }
     removeOwned(pid) {
         this._pokedex[pid] = false;
@@ -689,13 +689,13 @@ poke.FbTradesManager = class {
         });
     }
     beginListening(changeListener) {
-        this._unsubscribe = this._tradesRef.orderBy(poke.FB_TRADE_KEY_TIMESTAMP,"desc").limit(50).onSnapshot((snapshot) =>{
+        this._unsubscribe = this._tradesRef.orderBy(poke.FB_TRADE_KEY_TIMESTAMP, "desc").limit(50).onSnapshot((snapshot) => {
             this._tradesList = snapshot.docs;
-            if(changeListener) changeListener();
+            if (changeListener) changeListener();
         });
     }
     stopListening() {
-        if(this._unsubscribe) this._unsubscribe();
+        if (this._unsubscribe) this._unsubscribe();
     }
     get length() {
         return this._tradesList.length;
@@ -889,7 +889,7 @@ poke.initializePage = function() {
         poke.fbPokemonManager = new poke.FbPokemonManager(pid);
         new poke.PokemonPageController(pid, poke.gameToVersionGroup(game), game);
     }
-    if(document.querySelector("#tradesPage")) {
+    if (document.querySelector("#tradesPage")) {
         const tradeID = urlParams.get("trade");
         poke.fbTradesManager = new poke.FbTradesManager();
         new poke.TradesPageController(tradeID);
@@ -972,7 +972,7 @@ poke.main = function() {
 
 poke.startFirebaseAuthUi = function() {
     var uiConfig = {
-        signInSuccessUrl: '<url-to-redirect-to-on-success>',
+        signInSuccessUrl: '/profile.html',
         signInOptions: [
             // Leave the lines as is for the providers you want to offer your users.
             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -982,10 +982,10 @@ poke.startFirebaseAuthUi = function() {
         // tosUrl and privacyPolicyUrl accept either url string or a callback
         // function.
         // Terms of service url/callback.
-        tosUrl: '<your-tos-url>',
+        tosUrl: '/',
         // Privacy policy url/callback.
         privacyPolicyUrl: function() {
-            window.location.assign('<your-privacy-policy-url>');
+            window.location.assign('/');
         }
     };
 
