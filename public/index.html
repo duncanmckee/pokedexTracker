@@ -15,15 +15,14 @@
     <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
         <header class="bmd-layout-header">
             <div class="navbar navbar-dark bg-faded fixed-top justify-content-start">
-                <button class="navbar-toggler" type="button" data-toggle="drawer" data-target="#dw-s2">
+                <!-- <button class="navbar-toggler" type="button" data-toggle="drawer" data-target="#dw-s2">
           <span class="sr-only">Toggle drawer</span>
           <i class="material-icons">menu</i>
-        </button>
+        </button> -->
                 <a class="navbar-brand" href="#">Pokedex Tracker</a>
-                <button id="signOutButton" button type="button" class="btn">Sign Out</button>
             </div>
         </header>
-        <div id="dw-s2" class="bmd-layout-drawer bg-faded">
+        <!-- <div id="dw-s2" class="bmd-layout-drawer bg-faded">
             <header>
                 <a class="navbar-brand">Pokedex Tracker</a>
             </header>
@@ -33,24 +32,26 @@
                 <a id="menuShowMy" class="list-group-item"><i class="material-icons"></i>My Pokedex</a>
                 <a id="menuSignOut" class="list-group-item"><i class="material-icons">logout</i>Sign Out</a>
             </ul>
-        </div>
+        </div> -->
         <main class="bmd-layout-content">
-            <h1>Welcome to the Pokédex Tracker!</h1>
+            <div id="loginPage">
+                <h1>Welcome to the Pokédex Tracker!</h1>
 
-            <div class="form-group">
-                <label for="inputEmail" class="bmd-label-floating">Email</label>
-                <input type="email" class="form-control" id="inputEmail">
-            </div>
-            <div class="form-group">
-                <label for="inputPassword" class="bmd-label-floating">Password</label>
-                <input type="password" class="form-control" id="inputPassword">
-            </div>
-            <button id="createAccountButton" button type="button" class="btn btn-primary btn-outline">Create Account</button>
-            <button id="logInButton" button type="button" class="btn btn-primary btn-outline">Log In to Existing Account</button>
-            <hr>
-            <button id="anonymousAuthButton" button type="button" class="btn btn-primary btn-outline">Use Guest Mode</button>
-            </hr>
-            <div id="firebaseui-auth-container"></div>
+                <div class="form-group">
+                    <label for="inputEmail" class="bmd-label-floating">Email</label>
+                    <input type="email" class="form-control" id="inputEmail">
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword" class="bmd-label-floating">Password</label>
+                    <input type="password" class="form-control" id="inputPassword">
+                </div>
+                <button id="createAccountButton" button type="button" class="btn btn-primary btn-outline">Create Account</button>
+                <button id="logInButton" button type="button" class="btn btn-primary btn-outline">Log In to Existing Account</button>
+                <hr>
+                <button id="anonymousAuthButton" button type="button" class="btn btn-primary btn-outline">Use Guest Mode</button>
+                </hr>
+                <div id="firebaseui-auth-container"></div>
+            </div>"
         </main>
     </div>
 

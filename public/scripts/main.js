@@ -2,11 +2,11 @@ var poke = poke || {};
 
 poke.NUM_POKEMON = 898;
 
-poke.FB_COLLECTION_USER = "User";
-poke.FB_USER_KEY_NAME = "name";
-poke.FB_USER_KEY_CONTACT = "contactEmail";
-poke.FB_USER_KEY_GAMES = "gameOwned";
-poke.FB_USER_KEY_POKEMON = "pokemonOwned";
+poke.FB_COLLECTION_USERS = "User";
+poke.FB_USERS_KEY_NAME = "name";
+poke.FB_USERS_KEY_CONTACT = "contactEmail";
+poke.FB_USERS_KEY_GAMES = "gameOwned";
+poke.FB_USERS_KEY_POKEMON = "pokemonOwned";
 
 poke.FB_COLLECTION_TRADE = "TradeRequest";
 poke.FB_TRADE_KEY_AUTHOR = "author";
@@ -137,17 +137,65 @@ poke.SideNavController = class {
                 window.location.href = "/trades.html";
             });
         }
+        const menuSignInItem = document.querySelector("#menuSignIn");
+        if(menuSignInItem) {
+            if(poke.fbAuthManager.isSignedIn) {
+                menuSignInItem.style.display = "none";
+            }
+            menuSignInItem.addEventListener("click", (event) => {
+                window.location.href = "/";
+                menuSignInItem.style.display = "none";
+                if(menuSignOutItem) menuSignOutItem.style.display = "flex";
+            });
+        }
         const menuSignOutItem = document.querySelector("#menuSignOut");
         if (menuSignOutItem) {
+            if(!poke.fbAuthManager.isSignedIn) {
+                menuSignOutItem.style.display = "none";
+            }
             menuSignOutItem.addEventListener("click", (event) => {
-                rhit.fbAuthManager.signOut();
+                poke.fbAuthManager.signOut();
+                if(menuSignInItem) menuSignInItem.style.display = "flex";
+                menuSignOutItem.style.display = "none";
             });
         }
     }
 }
 poke.LoginPageController = class {
     constructor() {
+        const inputEmailEl = document.querySelector("#inputEmail");
+        const inputPasswordEl = document.querySelector("#inputPassword");
 
+        document.querySelector("#createAccountButton").onclick = (event) => {
+            console.log(`Create account for email: ${inputEmailEl.value}  password: ${inputPasswordEl.value}`);
+            firebase.auth().createUserWithEmailAndPassword(inputEmailEl.value, inputPasswordEl.value).catch(function(error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log("Create user error", errorCode, errorMessage);
+            });
+        };
+
+        document.querySelector("#logInButton").onclick = (event) => {
+            console.log(`Log in to existing account for email: ${inputEmailEl.value}  password: ${inputPasswordEl.value}`);
+            firebase.auth().signInWithEmailAndPassword(inputEmailEl.value, inputPasswordEl.value).catch(function(error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log("Log in existing user error", errorCode, errorMessage);
+            });
+        };
+
+        document.querySelector("#anonymousAuthButton").onclick = (event) => {
+            console.log(`Log in via Anonymous auth/ Guest Mode`);
+
+            firebase.auth().signInAnonymously().catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log("Anonymous auth error", errorCode, errorMessage);
+            });
+        };
+
+        // poke.startFirebaseAuthUi();
     }
 }
 poke.ProfilePageController = class {
@@ -170,7 +218,6 @@ poke.PokemonPageController = class {
             pokeIcon.classList.add("dex-icon");
             pokeIcon.innerHTML = `<img id="pkmn${id}" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idstay}.png">`;
             pokeIcon.onclick = (event) => {
-                console.log(pokedexList.scrollTop);
                 if (pid == idstay) {
                     window.location.href = "/pokemon.html";
                 } else if (versionIn) {
@@ -338,7 +385,6 @@ poke.PokemonPageController = class {
                             const evolutionList = document.querySelector("#evolutionContainer");
                             let stages = [];
                             let chain = [];
-                            // Actually pull the evolutions!
                             chain.push({ "data": data.chain, "stage": 1 });
                             while (chain.length != 0) {
                                 const current = chain.shift();
@@ -582,19 +628,23 @@ poke.TradesPageController = class {
                 window.location.href = `/trades.html?trade=${index}`;
             }
             newTrade.classList.add("trade-item");
-            newTrade.innerHTML = `<div class="trade-icon-holder">
-            <img class="trade-icon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${trade.pokemon}.png">
-            </div>
-            <h1 class="trade-user">${trade.uid}</h1>
-            <div class="trade-message">${trade.description}</div>`;
+            trade.getName().then((name) => {
+                newTrade.innerHTML = `<div class="trade-icon-holder">
+                <img class="trade-icon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${trade.pokemon}.png">
+                </div>
+                <h1 class="trade-user">${name}</h1>
+                <div class="trade-message">${trade.description}</div>`;
+            });
             this._tradesListElement.appendChild(newTrade);
         }
         if (poke.fbTradesManager.length > this._tradeDisplayed) {
             const trade = poke.fbTradesManager.getTradeAtIndex(this._tradeDisplayed);
             this._tradeDisplayIcon.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${trade.pokemon}.png`;
-            this._tradeDisplayUser.innerHTML = trade.uid;
+            trade.getName().then((name) => {
+                this._tradeDisplayUser.innerHTML = name;
+            });
             this._tradeDisplayMessage.innerHTML = trade.description;
-            if ("example" == trade.uid) { // FIX ME
+            if (poke.fbAuthManager.uid == trade.uid) {
                 this._tradeDisplayOptions.style.display = "block";
             } else {
                 this._tradeDisplayOptions.style.display = "none";
@@ -605,33 +655,81 @@ poke.TradesPageController = class {
 
 poke.FbAuthManager = class {
     constructor() {
-
+        this._user = null;
+        this._name = "";
     }
     beginListening(changeListener) {
-
+        firebase.auth().onAuthStateChanged((user) => {
+            this._user = user;
+            changeListener();
+        })
     }
     signIn() {
 
     }
     signOut() {
-
+        firebase.auth().signOut();
+    }
+    get isSignedIn() {
+        return !!this._user;
+    }
+    get uid() {
+        return this._user.uid;
+    }
+    get name() {
+        return this._name || this._user.displayName;
     }
 }
 poke.FbProfileManager = class {
     constructor() {
-
+        this._usersRef = firebase.firestore().collection(poke.FB_COLLECTION_USERS);
+        this._user = null;
+        this._unsubscribe = null;
     }
     tryCreateNewUser(uid, name) {
-
+        const userRef = this._usersRef.doc(uid);
+        return userRef.get().then((doc) => {
+            if(!doc.exists) {
+                return userRef.set({
+                    [poke.FB_USERS_KEY_NAME]: name,
+                    [poke.FB_USERS_KEY_GAMES]: {},
+                    [poke.FB_USERS_KEY_POKEMON]: {}
+                }).then(() => {
+                    return true;
+                }).catch((err) => {
+                    return false;
+                });
+            }else {
+                return false;
+            }
+        });
     }
-    beginListening(changeListener) {
-
+    beginListening(uid, changeListener) {
+        const userRef = this._usersRef.doc(uid);
+        this._unsubscribe = userRef.onSnapshot((doc) => {
+            if(doc.exists) {
+                this._user = doc;
+                if(changeListener) changeListener();
+            }
+        });
+    }
+    getUserByUid(uid) {
+        const userRef = this._usersRef.doc(uid);
+        return userRef.get().then((doc) => {
+            if(doc) {
+                return doc.data().name;
+            }
+            return "";
+        });
     }
     stopListening() {
-
+        if(this._unsubscribe) this._unsubscribe();
     }
     updateName(name) {
-
+        const userRef = this._usersRef.doc(poke.fbAuthManager.uid);
+        return userRef.update({
+            [poke.FB_USERS_KEY_NAME]: name
+        });
     }
     addGame(game) {
 
@@ -642,36 +740,48 @@ poke.FbProfileManager = class {
 }
 poke.FbPokemonManager = class {
     constructor(pid) {
-        this._pid = pid;
-        this._pokedex = {};
-        this._unsubscribe = null;
-        this._pokedexRef = firebase.firestore().collection(poke.FB_COLLECTION_USER).doc("example"); // FIX ME
+        if(poke.fbAuthManager.isSignedIn) {
+            this._pid = pid;
+            this._pokedex = {};
+            this._unsubscribe = null;
+            this._pokedexRef = firebase.firestore().collection(poke.FB_COLLECTION_USERS).doc(poke.fbAuthManager.uid);
+        }
     }
     addOwned(pid) {
-        this._pokedex[pid] = true;
-        this._pokedexRef.update({
-            [poke.FB_USER_KEY_POKEMON]: this._pokedex
-        });
+        if(poke.fbAuthManager.isSignedIn) {
+            this._pokedex[pid] = true;
+            this._pokedexRef.update({
+                [poke.FB_USERS_KEY_POKEMON]: this._pokedex
+            });
+        }
     }
     beginListening(changeListener) {
-        this._unsubscribe = this._pokedexRef.onSnapshot((doc) => {
-            if (doc.exists) {
-                this._pokedex = doc.get(poke.FB_USER_KEY_POKEMON);
-                if (changeListener) changeListener();
-            }
-        })
+        if(poke.fbAuthManager.isSignedIn) {
+            this._unsubscribe = this._pokedexRef.onSnapshot((doc) => {
+                if (doc.exists) {
+                    this._pokedex = doc.get(poke.FB_USERS_KEY_POKEMON);
+                    if (changeListener) changeListener();
+                }
+            });
+        }
     }
     stopListening() {
-        if (this._unsubscribe) this._unsubscribe();
+        if(poke.fbAuthManager.isSignedIn) {
+            if (this._unsubscribe) this._unsubscribe();
+        }
     }
     removeOwned(pid) {
-        this._pokedex[pid] = false;
-        this._pokedexRef.update({
-            [poke.FB_USER_KEY_POKEMON]: this._pokedex
-        });
+        if(poke.fbAuthManager.isSignedIn) {
+            this._pokedex[pid] = false;
+            this._pokedexRef.update({
+                [poke.FB_USERS_KEY_POKEMON]: this._pokedex
+            });
+        }
     }
     ownsPokemon(pid) {
-        return !!this._pokedex[pid];
+        if(poke.fbAuthManager.isSignedIn) {
+            return !!this._pokedex[pid];
+        }
     }
 }
 poke.FbTradesManager = class {
@@ -682,7 +792,7 @@ poke.FbTradesManager = class {
     }
     createTrade(pokemon, description) {
         this._tradesRef.add({
-            [poke.FB_TRADE_KEY_AUTHOR]: "example", // FIX ME
+            [poke.FB_TRADE_KEY_AUTHOR]: poke.fbAuthManager.uid,
             [poke.FB_TRADE_KEY_POKEMON]: pokemon,
             [poke.FB_TRADE_KEY_DESCRIPTION]: description,
             [poke.FB_TRADE_KEY_TIMESTAMP]: firebase.firestore.Timestamp.now()
@@ -725,9 +835,14 @@ poke.FbTradesManager = class {
 poke.Trade = class {
     constructor(id, uid, pokemon, description) {
         this.id = id;
-        this.uid = uid; // FIX ME
+        this.uid = uid;
         this.pokemon = pokemon;
         this.description = description;
+    }
+    getName() {
+        return poke.fbProfileManager.getUserByUid(this.uid).then((value) => {
+            return value;
+        })
     }
 }
 
@@ -780,7 +895,6 @@ poke.gameToVersionGroup = function(game) {
     }
     return null;
 }
-
 poke.parseEvolutionType = function(evolution, speciesID) {
     if (evolution) {
         let evoDesc = "";
@@ -880,9 +994,17 @@ poke.parseEvolutionType = function(evolution, speciesID) {
     return "";
 }
 
+poke.checkForRedirects = function() {
+    if(document.querySelector("#loginPage") && poke.fbAuthManager.isSignedIn) {
+        window.location.href = "/pokemon.html";
+    }
+}
 poke.initializePage = function() {
     const urlParams = new URLSearchParams(window.location.search);
     new poke.SideNavController();
+    if (document.querySelector("#loginPage")) {
+        new poke.LoginPageController();
+    }
     if (document.querySelector("#pokemonDetailsPage")) {
         const pid = urlParams.get("pid");
         const game = urlParams.get("game");
@@ -895,79 +1017,65 @@ poke.initializePage = function() {
         new poke.TradesPageController(tradeID);
     }
 }
+poke.createUserObjectIfNeeded = function() {
+    return new Promise((resolve, reject) => {
+        if(!poke.fbAuthManager.isSignedIn) {
+            resolve(false);
+            return;
+        }
+        if(!document.querySelector("#loginPage")) {
+            resolve(false);
+            return;
+        }
+        poke.fbProfileManager.tryCreateNewUser(poke.fbAuthManager.uid, poke.fbAuthManager.name).then((isUserNew) => {
+            resolve(isUserNew);
+        });
+    });
+}
 
 poke.main = function() {
     poke.fbAuthManager = new poke.FbAuthManager();
-    poke.initializePage();
-
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/firebase.User
-            const displayName = user.displayName;
-            const email = user.email;
-            const photoURL = user.photoURL;
-            const isAnonymous = user.isAnonymous;
-            const phoneNumber = user.phoneNumber;
-            const uid = user.uid;
-            console.log("The user signed in ", uid);
-            console.log('displayName :>> ', displayName);
-            console.log('email :>> ', email);
-            console.log('photoURL :>> ', photoURL);
-            console.log('isAnonymous :>> ', isAnonymous);
-            console.log('phoneNumber :>> ', phoneNumber);
-            console.log('uid :>> ', uid);
-
-            // ...
-        } else {
-            // User is signed out
-            // ...
-            console.log("There is no user signed in");
-        }
+    poke.fbProfileManager = new poke.FbProfileManager();
+    poke.fbAuthManager.beginListening(() => {
+        poke.createUserObjectIfNeeded().then((isUserNew) => {
+            if(isUserNew) {
+                window.location.href = "/profile.html";
+                return;
+            }
+            poke.checkForRedirects();
+            poke.initializePage();
+        })
     });
 
-    const inputEmailEl = document.querySelector("#inputEmail");
-    const inputPasswordEl = document.querySelector("#inputPassword");
+    // poke.initializePage();
 
-    document.querySelector("#createAccountButton").onclick = (event) => {
-        console.log(`Create account for email: ${inputEmailEl.value}  password: ${inputPasswordEl.value}`);
-        firebase.auth().createUserWithEmailAndPassword(inputEmailEl.value, inputPasswordEl.value).catch(function(error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.log("Create user error", errorCode, errorMessage);
-        });
-    };
 
-    document.querySelector("#logInButton").onclick = (event) => {
-        console.log(`Log in to existing account for email: ${inputEmailEl.value}  password: ${inputPasswordEl.value}`);
-        firebase.auth().signInWithEmailAndPassword(inputEmailEl.value, inputPasswordEl.value).catch(function(error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.log("Log in existing user error", errorCode, errorMessage);
-        });
-    };
 
-    document.querySelector("#anonymousAuthButton").onclick = (event) => {
-        console.log(`Log in via Anonymous auth/ Guest Mode`);
+    // firebase.auth().onAuthStateChanged((user) => {
+    //     if (user) {
+    //         // User is signed in, see docs for a list of available properties
+    //         // https://firebase.google.com/docs/reference/js/firebase.User
+    //         const displayName = user.displayName;
+    //         const email = user.email;
+    //         const photoURL = user.photoURL;
+    //         const isAnonymous = user.isAnonymous;
+    //         const phoneNumber = user.phoneNumber;
+    //         const uid = user.uid;
+    //         console.log("The user signed in ", uid);
+    //         console.log('displayName :>> ', displayName);
+    //         console.log('email :>> ', email);
+    //         console.log('photoURL :>> ', photoURL);
+    //         console.log('isAnonymous :>> ', isAnonymous);
+    //         console.log('phoneNumber :>> ', phoneNumber);
+    //         console.log('uid :>> ', uid);
 
-        firebase.auth().signInAnonymously().catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.log("Anonymous auth error", errorCode, errorMessage);
-        });
-    };
-
-    document.querySelector("#signOutButton").onclick = (event) => {
-        console.log("Sign Out called");
-        firebase.auth().signOut().then(function() {
-            // Sign-out successful.
-        }).catch(function(error) {
-            // An error happened.
-        });
-    };
-
-    poke.startFirebaseAuthUi();
+    //         // ...
+    //     } else {
+    //         // User is signed out
+    //         // ...
+    //         console.log("There is no user signed in");
+    //     }
+    // });
 };
 
 poke.startFirebaseAuthUi = function() {
