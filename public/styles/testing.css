@@ -11,6 +11,7 @@
 .vert-scroll-hidden {
     overflow-y: scroll;
     scrollbar-width: thin;
+    scrollbar-color: #CDCDCD #F1F1F1;
 }
 
 /* .vert-scroll-hidden::-webkit-scrollbar {

@@ -513,9 +513,7 @@ poke.PokemonPageController = class {
             const iconHeight = document.querySelector(".dex-icon").offsetHeight;
             const scrollHeight = iconHeight*(Math.floor(pid/3)-2);
             pokedexList.scrollTop = scrollHeight;
-            console.log(scrollHeight);
         }
-        
     }
     updatePage() {
         for(let id = 1; id <= poke.NUM_POKEMON; id++) {
