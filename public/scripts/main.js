@@ -185,14 +185,7 @@ poke.LoginPageController = class {
         };
 
         document.querySelector("#anonymousAuthButton").onclick = (event) => {
-            console.log(`Log in via Anonymous auth/ Guest Mode`);
-
-            firebase.auth().signInAnonymously().catch(function(error) {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                console.log("Anonymous auth error", errorCode, errorMessage);
-            });
+            window.location.href = "/pokemon.html";
         };
 
         // poke.startFirebaseAuthUi();
