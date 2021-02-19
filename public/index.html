@@ -15,26 +15,11 @@
     <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
         <header class="bmd-layout-header">
             <div class="navbar navbar-dark bg-faded fixed-top justify-content-start">
-                <!-- <button class="navbar-toggler" type="button" data-toggle="drawer" data-target="#dw-s2">
-          <span class="sr-only">Toggle drawer</span>
-          <i class="material-icons">menu</i>
-        </button> -->
-                <a class="navbar-brand" href="#">Pokedex Tracker</a>
+                <a class="navbar-brand">Pokedex Tracker</a>
             </div>
         </header>
-        <!-- <div id="dw-s2" class="bmd-layout-drawer bg-faded">
-            <header>
-                <a class="navbar-brand">Pokedex Tracker</a>
-            </header>
-            <ul class="list-group">
-                <a id="menuProfile" class="list-group-item"><i class="material-icons">account_box</i>My Profile</a>
-                <a id="menuShowAll" class="list-group-item"><i class="material-icons"></i>Pokedex</a>
-                <a id="menuShowMy" class="list-group-item"><i class="material-icons"></i>My Pokedex</a>
-                <a id="menuSignOut" class="list-group-item"><i class="material-icons">logout</i>Sign Out</a>
-            </ul>
-        </div> -->
         <main class="bmd-layout-content">
-            <div id="loginPage">
+            <div id="loginPage" class="container page-container">
                 <h1>Welcome to the Pokédex Tracker!</h1>
 
                 <div class="form-group">
@@ -45,8 +30,10 @@
                     <label for="inputPassword" class="bmd-label-floating">Password</label>
                     <input type="password" class="form-control" id="inputPassword">
                 </div>
-                <button id="createAccountButton" button type="button" class="btn btn-primary btn-outline">Create Account</button>
-                <button id="logInButton" button type="button" class="btn btn-primary btn-outline">Log In to Existing Account</button>
+                <div id="accountButtons">
+                    <button id="createAccountButton" button type="button" class="btn btn-primary btn-outline">Create Account</button>
+                    <button id="logInButton" button type="button" class="btn btn-primary btn-outline">Log In to Existing Account</button>
+                </div>
                 <hr>
                 <button id="anonymousAuthButton" button type="button" class="btn btn-primary btn-outline">Use Guest Mode</button>
                 </hr>
