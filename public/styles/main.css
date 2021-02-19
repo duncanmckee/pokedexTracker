@@ -33,25 +33,21 @@ body {
     color: var(--header-color);
 }
 
-.bmd-layout-content>#loginPage {
-    display: grid;
-    grid-template-areas: 'header header header header header header' 'main main main right right right' 'footer footer footer footer footer footer';
-    grid-gap: 10px;
-    background-color: #2196F3;
-    padding: 10px;
-}
-
 .bmd-layout-content h1 {
     /* round boi */
     border-radius: 25px;
     background: #003A70;
     padding: 20px;
-    width: auto;
+    width: 750px;
     height: auto;
     /* text styling*/
     color: white;
     font-weight: bold;
     text-align: center;
+}
+
+.bmd-layout-content div {
+    width: 750px;
 }
 
 .grid-container>div {
